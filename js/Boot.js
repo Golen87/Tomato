@@ -25,28 +25,8 @@ Global.Boot.prototype = {
 	},
 
 	rescale: function() {
-		var isFirefox = false;
-
-		var element = document.getElementsByTagName('canvas')[0];
-		var style = window.getComputedStyle(element);
-		var rect = element.getBoundingClientRect();
-
-		var zoom = style.getPropertyValue('zoom') || style.getPropertyValue('-moz-transform');
-		if (isNaN(zoom)) { // Firefox
-			isFirefox = true;
-			var values = zoom.split('(')[1].split(')')[0].split(',');
-			zoom = values[0];
-			rect.x /= zoom;
-			rect.y /= zoom;
-		}
-		zoom = parseInt(zoom);
-
-		Global.inputScale.x = 1 / zoom;
-		Global.inputScale.y = 1 / zoom;
-		if (!isFirefox) {
-			Global.inputOffset.x = rect.left * (1 - 1/zoom);
-			Global.inputOffset.y = rect.top * (1 - 1/zoom);
-		}
+		Global.inputScale.x = 1;
+		Global.inputScale.y = 1;
 	},
 
 	readSettings: function() {
