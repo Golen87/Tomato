@@ -55,7 +55,9 @@ EntityManager.prototype.createTile = function( x, y ) {
 	if ( this.isTile( x, y, TileTypes.Bush ) ) {
 		var s = this.addSprite( x, y, 0 );
 		s.loadTexture( 'bush' );
-		s.anchor.set( 1/3, 1/2 );
+		s.frame = randInt(0,2);
+		s.y -= TILE_SIZE/8;
+		s.anchor.set( 1/3, 1/2 - 1/16 );
 	}
 
 	if ( this.isTile( x, y, TileTypes.Crop ) ) {
