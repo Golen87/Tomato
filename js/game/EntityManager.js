@@ -150,16 +150,16 @@ EntityManager.prototype.reveal = function ( x, y )
 	}
 };
 
-EntityManager.prototype.createCrop = function ( x, y, entity )
+EntityManager.prototype.plantCrop = function ( x, y, cropData )
 {
 	var p = [x,y];
 	if ( this.tileMap[p] == TileTypes.None ) {
 
-		var crop = new Crop( CropTypes.Tomato );
+		var crop = new Crop( cropData );
 		this.tileMap[p] = crop;
 		this.cropInstances.push( crop );
 
-		Global.Audio.play( 'digging_dirt' );
+		Global.Audio.play( 'planting_seed' );
 
 		var key = x + "," + y;
 		this.activeSet.delete(key);

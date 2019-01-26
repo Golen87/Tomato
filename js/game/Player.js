@@ -170,7 +170,7 @@ Player.prototype.update = function ()
 
 Player.prototype.useItem = function ()
 {
-	Global.World.createCrop( this.gridX, this.gridY, Tiles.Crop );
+	Global.World.plantCrop( this.gridX, this.gridY, CropTypes.Tomato );
 	this.setAnimation( 'use' );
 
 	Global.game.time.events.add( Phaser.Timer.SECOND * 1 / 6, function() {

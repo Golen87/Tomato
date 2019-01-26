@@ -49,6 +49,30 @@ function AudioManager()
 	this.sounds[name].sound.addMarker( '5', 1.840, 0.42, vol );
 	this.sounds[name].markers = ['1', '2', '3', '4', '5'];
 
+	var name = 'planting_seed';
+	var vol = 0.4;
+	this.sounds[name] = {};
+	this.sounds[name].sound = Global.game.add.audio( name );
+	this.sounds[name].sound.addMarker( '1', 0.000, 0.42, vol );
+	this.sounds[name].sound.addMarker( '2', 0.460, 0.42, vol );
+	this.sounds[name].sound.addMarker( '3', 0.920, 0.42, vol );
+	this.sounds[name].sound.addMarker( '4', 1.380, 0.42, vol );
+	this.sounds[name].sound.addMarker( '5', 1.840, 0.42, vol );
+	this.sounds[name].sound.addMarker( '6', 2.300, 0.42, vol );
+	this.sounds[name].markers = ['1', '2', '3', '4', '5', '6'];
+
+	var name = 'grow_pop';
+	var vol = 0.1;
+	this.sounds[name] = {};
+	this.sounds[name].sound = Global.game.add.audio( name );
+	this.sounds[name].sound.addMarker( '1', 0.000, 0.42, vol );
+	this.sounds[name].sound.addMarker( '2', 0.460, 0.42, vol );
+	this.sounds[name].sound.addMarker( '3', 0.920, 0.42, vol );
+	this.sounds[name].sound.addMarker( '4', 1.380, 0.42, vol );
+	this.sounds[name].sound.addMarker( '5', 1.840, 0.42, vol );
+	this.sounds[name].sound.addMarker( '6', 2.300, 0.42, vol );
+	this.sounds[name].markers = ['1', '2', '3', '4', '5', '6'];
+
 	/*
 	var name = 'swing';
 	var vol = 0.15;

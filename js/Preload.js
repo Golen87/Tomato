@@ -33,8 +33,8 @@ Global.Preload.prototype = {
 		this.load.audio( 'walking_dirt', 'assets/sounds/Walking_Dirt.ogg' );
 		this.load.audio( 'menu_inventory', 'assets/sounds/Menu_Inventory.ogg' );
 		this.load.audio( 'digging_dirt', 'assets/sounds/Digging_Dirt.ogg' );
-
-		//this.load.audio( 'menu', 'assets/sounds/menu.ogg' );
+		this.load.audio( 'planting_seed', 'assets/sounds/Planting_Seed.ogg' );
+		this.load.audio( 'grow_pop', 'assets/sounds/Grow_Pop.ogg' );
 
 
 		// Loading progress bar

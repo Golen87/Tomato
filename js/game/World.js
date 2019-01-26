@@ -134,10 +134,10 @@ World.prototype.checkCollision = function ( x, y )
 	return this.entityManager.checkCollisionAt( x, y );
 };
 
-World.prototype.createCrop = function ( x, y, entity )
+World.prototype.plantCrop = function ( x, y, cropData )
 {
 	if ( this.terrainManager.checkDirtAt( x, y )) {
-		this.entityManager.createCrop( x, y, entity );
+		this.entityManager.plantCrop( x, y, cropData );
 		this.entityManager.loadArea( this.camGoal.x, this.camGoal.y );
 	}
 };
