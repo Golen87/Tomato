@@ -26,11 +26,12 @@ Global.Preload.prototype = {
 		//this.load.spritesheet( 'player', 'assets/sprites/shiba.png', 128, 256 );
 		this.load.spritesheet( 'ground', 'assets/sprites/ground.png', 128, 128 );
 		this.load.spritesheet( 'bush', 'assets/sprites/bush.png', 384, 256 );
-		this.load.spritesheet( 'tomato', 'assets/sprites/tomato.png', 128, 256 );
+		this.load.spritesheet( 'tomato', 'assets/sprites/tomato2.png', 128, 256 );
 		this.load.spritesheet( 'items', 'assets/sprites/tomato.png', 128, 128 );
 
 		this.load.audio( 'walking_grass', 'assets/sounds/Walking_Grass.ogg' );
 		this.load.audio( 'walking_dirt', 'assets/sounds/Walking_Dirt.ogg' );
+		this.load.audio( 'menu_inventory', 'assets/sounds/Menu_Inventory.ogg' );
 
 		//this.load.audio( 'menu', 'assets/sounds/menu.ogg' );
 

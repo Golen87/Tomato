@@ -2,6 +2,8 @@ function EntityManager ( entityGroup )
 {
 	TileManager.call( this, 'tomato', entityGroup );
 	this.outsideRange = 5;
+
+	this.cropInstances = [];
 }
 
 
@@ -60,12 +62,9 @@ EntityManager.prototype.createTile = function( x, y ) {
 		s.anchor.set( 1/3, 1/2 - 1/16 );
 	}
 
-	if ( this.isTile( x, y, TileTypes.Crop ) ) {
+	if ( this.getTile(x, y) instanceof Crop ) {
 		var s = this.addSprite( x, y, 0 );
-		s.loadTexture( 'tomato' );
-		s.frame = randInt(0,2);
-		s.y -= TILE_SIZE/8;
-		s.anchor.set( 0, 1/2 - 1/16 );
+		this.getTile(x, y).init( s, x, y );
 	}
 };
 
@@ -151,15 +150,27 @@ EntityManager.prototype.reveal = function ( x, y )
 	}
 };
 
-EntityManager.prototype.createEntity = function ( x, y, entity )
+EntityManager.prototype.createCrop = function ( x, y, entity )
 {
 	var p = [x,y];
-	if ( this.tileMap[p] != TileTypes.Crop ) {
-		this.tileMap[p] = TileTypes.Crop;
+	if ( this.tileMap[p] == TileTypes.None ) {
+
+		var crop = new Crop( CropTypes.Tomato );
+		this.tileMap[p] = crop;
+		this.cropInstances.push( crop );
+
 		var key = x + "," + y;
 		this.activeSet.delete(key);
 	}
 	//callback( false );
 }
+
+
+EntityManager.prototype.update = function ()
+{
+	for (var i = this.cropInstances.length - 1; i >= 0; i--) {
+		this.cropInstances[i].update();
+	}
+};
 
 extend( TileManager, EntityManager );

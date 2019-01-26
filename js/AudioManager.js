@@ -26,6 +26,18 @@ function AudioManager()
 	this.sounds[name].sound.addMarker( '6', 2.300, 0.42, vol );
 	this.sounds[name].markers = ['1', '2', '3', '4', '5', '6'];
 
+	var name = 'menu_inventory';
+	var vol = 0.4;
+	this.sounds[name] = {};
+	this.sounds[name].sound = Global.game.add.audio( name );
+	this.sounds[name].sound.addMarker( 'open',			0.000, 0.42, vol );
+	this.sounds[name].sound.addMarker( 'move cursor',	0.460, 0.42, vol );
+	this.sounds[name].sound.addMarker( 'seeds',			0.920, 0.42, vol );
+	this.sounds[name].sound.addMarker( 'scythe_hoe',	1.380, 0.42, vol );
+	this.sounds[name].sound.addMarker( 'watercan',		1.840, 0.42, vol );
+	this.sounds[name].sound.addMarker( 'close',			2.300, 0.42, vol );	
+	this.sounds[name].markers = ['open', 'move cursor', 'seeds', 'scythe_hoe', 'watercan', 'close'];
+
 	/*
 	var name = 'swing';
 	var vol = 0.15;

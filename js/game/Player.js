@@ -170,7 +170,7 @@ Player.prototype.update = function ()
 
 Player.prototype.useItem = function ()
 {
-	Global.World.createEntity( this.gridX, this.gridY, Tiles.Crop );
+	Global.World.createCrop( this.gridX, this.gridY, Tiles.Crop );
 	this.setAnimation( 'use' );
 
 	Global.game.time.events.add( Phaser.Timer.SECOND * 1 / 6, function() {

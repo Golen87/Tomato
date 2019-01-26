@@ -46,6 +46,8 @@ World.prototype.update = function ()
 {
 	this.Player.update();
 
+	this.entityManager.update();
+
 	this.entityGroup.sort( 'y', Phaser.Group.SORT_ASCENDING );
 
 
@@ -132,10 +134,10 @@ World.prototype.checkCollision = function ( x, y )
 	return this.entityManager.checkCollisionAt( x, y );
 };
 
-World.prototype.createEntity = function ( x, y, entity )
+World.prototype.createCrop = function ( x, y, entity )
 {
 	if ( this.terrainManager.checkDirtAt( x, y )) {
-		this.entityManager.createEntity( x, y, entity );
+		this.entityManager.createCrop( x, y, entity );
 		this.entityManager.loadArea( this.camGoal.x, this.camGoal.y );
 	}
 };

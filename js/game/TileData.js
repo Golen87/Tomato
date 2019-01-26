@@ -7,6 +7,12 @@ const TileTypes = {
 	'Crop': 6,
 };
 
+const CropTypes = {
+	'Tomato': {
+		'sprite': 'tomato'
+	},
+};
+
 const Tiles = {
 	'Grass': {
 		'pos': [[0,0], [0,1], [0,2]]
