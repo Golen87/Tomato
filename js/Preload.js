@@ -20,8 +20,10 @@ Global.Preload.prototype = {
 		this.load.bitmapFont( '04b24', 'assets/fonts/04b24/font.png', 'assets/fonts/04b24/font.fnt' ); // 8
 
 		this.load.image( 'tile', 'assets/sprites/tile.png' );
+		this.load.image( 'tree', 'assets/sprites/tree.png' );
 
-		this.load.spritesheet( 'player', 'assets/sprites/player.png', 64, 128 );
+		this.load.spritesheet( 'player', 'assets/sprites/shiba.png', 128, 256 );
+		this.load.spritesheet( 'tomato', 'assets/sprites/tomato.png', 64, 128 );
 		//this.load.spritesheet( 'tileset', 'assets/sprites/tileset.png', 16, 16 );
 		//this.load.spritesheet( 'fire', 'assets/sprites/fire.png', 16, 16 );
 

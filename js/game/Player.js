@@ -4,6 +4,7 @@ Player.prototype.create = function ( x, y, playerGroup )
 {
 	this.sprite = playerGroup.create( x, y, 'player', 0 );
 	this.sprite.anchor.set( 0, 0.5 );
+	this.sprite.scale.set( 0.5 );
 
 	this.sprite.goalX = 0;
 	this.sprite.goalY = 0;

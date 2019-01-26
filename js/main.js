@@ -13,7 +13,7 @@ var config = {
 	parent: "TITLE HERE",
 	state: null,
 	transparent: false,
-	antialias: false,
+	antialias: true,
 	physicsConfig: null,
 }
 

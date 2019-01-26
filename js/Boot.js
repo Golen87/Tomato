@@ -5,7 +5,6 @@ Global.Boot.prototype = {
 	preload: function() {
 		// Loading screen assets
 		this.load.image( 'preloader-bar', 'assets/sprites/preloader-bar.png' );
-		this.load.spritesheet( 'tileset', 'assets/sprites/tileset.png', 16, 16 );
 	},
 	create: function() {
 		// Physics system
