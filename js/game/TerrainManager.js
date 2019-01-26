@@ -1,6 +1,7 @@
 function TerrainManager ()
 {
 	TileManager.call( this, 'ground' );
+	this.outsideRange = 1;
 }
 
 
@@ -27,30 +28,6 @@ TerrainManager.prototype.generateTile = function ( x, y )
 
 TerrainManager.prototype.addLand = function( x, y, dx, dy, index ) {
 	if (this.isTile( x+dx, y+dy, TileTypes.Dirt )) {
-		var s = this.addSprite( x, y, 0 );
-
-		var frames = Tiles.Dirt.pos[index].toIndex( this.tileset );
-		s.animations.add( 'idle', frames, 1, true );
-		s.animations.play( 'idle' );
-
-		return s;
-	}
-};
-
-TerrainManager.prototype.addLandEdge = function( x, y, dx, dy, index ) {
-	if (this.isTile( x+dx, y+dy, TileTypes.Dirt ) && !this.isTile( x+dx, y, TileTypes.Dirt ) && !this.isTile( x, y+dy, TileTypes.Dirt )) {
-		var s = this.addSprite( x, y, 0 );
-
-		var frames = Tiles.Dirt.pos[index].toIndex( this.tileset );
-		s.animations.add( 'idle', frames, 1, true );
-		s.animations.play( 'idle' );
-
-		return s;
-	}
-};
-
-TerrainManager.prototype.addLandCorner = function( x, y, dx, dy, index ) {
-	if (this.isTile( x+dx, y, TileTypes.Dirt ) && this.isTile( x, y+dy, TileTypes.Dirt )) {
 		var s = this.addSprite( x, y, 0 );
 
 		var frames = Tiles.Dirt.pos[index].toIndex( this.tileset );

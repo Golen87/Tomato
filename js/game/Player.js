@@ -169,9 +169,7 @@ Player.prototype.useItem = function ()
 	Global.World.createEntity( this.gridX, this.gridY, Tiles.Crop );
 	this.setAnimation( 'use' );
 
-	this.allowInput = false;
 	Global.game.time.events.add( Phaser.Timer.SECOND * 1 / 6, function() {
-		this.allowInput = true;
 		this.setAnimation( 'idle', this.direction );
 	}, this );
 };

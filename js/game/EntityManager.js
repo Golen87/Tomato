@@ -1,6 +1,7 @@
 function EntityManager ( entityGroup )
 {
 	TileManager.call( this, 'tomato', entityGroup );
+	this.outsideRange = 5;
 }
 
 
@@ -34,25 +35,21 @@ EntityManager.prototype.generateTile = function ( x, y )
 	return TileTypes.None;
 };
 
-/*
-EntityManager.prototype.addEnemy = function( x, y, pos, sound ) {
-	//var pos = enemy.pos.choice();
+EntityManager.prototype.addTree = function( x, y ) {
 	var s = this.addSprite( x, y, 0 );
-	s.sound = sound;
+	s.loadTexture( 'tree' );
+	s.anchor.set( 1/3, 3/4 );
 
-	var frames = pos.toIndex( this.tileset );
-	s.animations.add( 'idle', frames, 2.5, true );
-	s.animations.play( 'idle' );
+	//var frames = pos.toIndex( this.tileset );
+	//s.animations.add( 'idle', frames, 2.5, true );
+	//s.animations.play( 'idle' );
 
 	return s;
 };
-*/
 
 EntityManager.prototype.createTile = function( x, y ) {
 	if ( this.isTile( x, y, TileTypes.Tree ) ) {
-		var s = this.addSprite( x, y, 0 );
-		s.loadTexture( 'tree' );
-		s.anchor.set( 1/3, 3/4 );
+		this.addTree( x, y );
 	}
 
 	if ( this.isTile( x, y, TileTypes.Bush ) ) {
@@ -87,7 +84,7 @@ EntityManager.prototype.attack = function ( x, y, callback )
 		for ( var i = 0; i < this.group.children.length; i++ )
 		{
 			var s = this.group.children[i];
-			if ( s.exists && s.key == [x,y] )
+			if ( s.exists && s.pkey == [x,y] )
 			{
 
 				function blink( sprite, count=0 ) {
@@ -130,10 +127,10 @@ EntityManager.prototype.kill = function ( x, y ) {
 	for ( var i = 0; i < this.group.children.length; i++ )
 	{
 		var s = this.group.children[i];
-		if ( s.exists && s.key == [x,y] )
+		if ( s.exists && s.pkey == [x,y] )
 		{
 			s.kill();
-			this.activeSet.delete(s.key);
+			this.activeSet.delete(s.pkey);
 			Global.Audio.play( s.sound, 'hurt' );
 		}
 	}
@@ -144,7 +141,7 @@ EntityManager.prototype.reveal = function ( x, y )
 	for ( var i = 0; i < this.group.children.length; i++ )
 	{
 		var s = this.group.children[i];
-		if ( s.exists && s.key == [x,y] )
+		if ( s.exists && s.pkey == [x,y] )
 		{
 			s.visible = true;
 			Global.Audio.play( s.sound, 'cry' );

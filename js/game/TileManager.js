@@ -11,6 +11,8 @@ function TileManager ( tileset, group=null )
 	this.group.createMultiple( 3*ROOM_WIDTH*ROOM_HEIGHT, tileset, 0, false );
 
 	this.activeSet = new Set();
+
+	this.outsideRange = 1;
 }
 
 
@@ -42,7 +44,7 @@ TileManager.prototype.addSpriteToGroup = function ( group, x, y, pos )
 	{
 		s.reset( TILE_SIZE*x, TILE_SIZE*y );
 		s.frame = posToIndex( this.tileset, pos );
-		s.key = x + "," + y;
+		s.pkey = x + "," + y;
 		s.alpha = 1.0;
 		s.tint = 0xffffff;
 	}
@@ -64,10 +66,10 @@ TileManager.prototype.addSprite = function ( x, y, pos )
 TileManager.prototype.isInView = function ( x, y )
 {
 	return (
-		x >= Global.game.camera.x - TILE_SIZE - TILE_SIZE &&
-		y >= Global.game.camera.y - TILE_SIZE - TILE_SIZE &&
-		x < Global.game.camera.x + TILE_SIZE * ROOM_WIDTH + TILE_SIZE &&
-		y < Global.game.camera.y + TILE_SIZE * ROOM_HEIGHT + TILE_SIZE
+		x >= Global.game.camera.x - TILE_SIZE - this.outsideRange * TILE_SIZE &&
+		y >= Global.game.camera.y - TILE_SIZE - this.outsideRange * TILE_SIZE &&
+		x < Global.game.camera.x + TILE_SIZE * ROOM_WIDTH + this.outsideRange * TILE_SIZE &&
+		y < Global.game.camera.y + TILE_SIZE * ROOM_HEIGHT + this.outsideRange * TILE_SIZE
 	);
 };
 
@@ -79,7 +81,7 @@ TileManager.prototype.clearOutOfView = function ()
 		if ( s.exists && !this.isInView( s.position.x, s.position.y ) )
 		{
 			s.kill();
-			this.activeSet.delete(s.key);
+			this.activeSet.delete(s.pkey);
 		}
 	}
 };
@@ -88,10 +90,10 @@ TileManager.prototype.loadArea = function ( worldX, worldY )
 {
 	this.clearOutOfView();
 
-	var startX = Global.game.camera.x - TILE_SIZE;
-	var startY = Global.game.camera.y - TILE_SIZE;
-	var endX = Global.game.camera.x + TILE_SIZE * ROOM_WIDTH + TILE_SIZE;
-	var endY = Global.game.camera.y + TILE_SIZE * ROOM_HEIGHT + TILE_SIZE;
+	var startX = Global.game.camera.x - this.outsideRange * TILE_SIZE;
+	var startY = Global.game.camera.y - this.outsideRange * TILE_SIZE;
+	var endX = Global.game.camera.x + TILE_SIZE * ROOM_WIDTH + this.outsideRange * TILE_SIZE;
+	var endY = Global.game.camera.y + TILE_SIZE * ROOM_HEIGHT + this.outsideRange * TILE_SIZE;
 
 	for ( var y = startY.grid(); y < endY.grid(); y++ ) {
 		for ( var x = startX.grid(); x < endX.grid(); x++ ) {
