@@ -23,9 +23,11 @@ Global.Preload.prototype = {
 		this.load.image( 'bush', 'assets/sprites/bush.png' );
 		this.load.image( 'tree', 'assets/sprites/tree.png' );
 
-		this.load.spritesheet( 'player', 'assets/sprites/shiba.png', 128, 256 );
+		this.load.spritesheet( 'player', 'assets/sprites/player.png', 128, 256 );
+		//this.load.spritesheet( 'player', 'assets/sprites/shiba.png', 128, 256 );
 		this.load.spritesheet( 'ground', 'assets/sprites/ground.png', 128, 128 );
 		this.load.spritesheet( 'tomato', 'assets/sprites/tomato.png', 128, 256 );
+		this.load.spritesheet( 'items', 'assets/sprites/tomato.png', 128, 128 );
 
 		//this.load.audio( 'footsteps', 'assets/sounds/footsteps.ogg' );
 
@@ -38,7 +40,7 @@ Global.Preload.prototype = {
 		var y = this.game.world.centerY;
 		var progressBg = this.game.add.sprite( x, y, 'preloader-bar' );
 		var progressFg = this.game.add.sprite( x, y, 'preloader-bar' );
-		progressBg.tint = 0x007700;
+		progressBg.tint = 0x000000;
 		progressBg.scale.set( scale );
 		progressBg.anchor.setTo( 0, 0.5 );
 		progressFg.scale.set( scale );

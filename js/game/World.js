@@ -5,7 +5,7 @@ World.prototype.create = function ()
 	Global.game.world.setBounds( -Infinity, -Infinity, Infinity, Infinity );
 	//Global.game.world.setBounds( -10, -10, 10, 10 );
 
-	this.helpGrid = Global.game.add.tileSprite( 0, 0, ROOM_WIDTH * TILE_SIZE, ROOM_HEIGHT * TILE_SIZE, 'tile' );
+	this.helpGrid = Global.game.add.tileSprite( -TILE_SIZE, -TILE_SIZE, (ROOM_WIDTH+2) * TILE_SIZE, (ROOM_HEIGHT+2) * TILE_SIZE, 'tile' );
 	this.helpGrid.alpha = 0.1;
 
 	this.entityGroup = Global.game.add.group();
@@ -17,7 +17,8 @@ World.prototype.create = function ()
 		this.entityGroup
 	);
 
-	this.landManager = new LandManager();
+	this.terrainManager = new TerrainManager();
+	this.entityManager = new EntityManager( this.entityGroup );
 
 	this.camGoal = new Phaser.Point();
 	this.camGoal.x = 0;
@@ -37,24 +38,35 @@ World.prototype.create = function ()
 
 	Global.game.camera.x = Math.round( this.camPos.x );
 
-	this.landManager.loadArea( this.camGoal.x, this.camGoal.y );
+	this.terrainManager.loadArea( this.camGoal.x, this.camGoal.y );
+	this.entityManager.loadArea( this.camGoal.x, this.camGoal.y );
 };
 
 World.prototype.update = function ()
 {
 	this.Player.update();
 
-	//this.entityGroup.sort( 'y', Phaser.Group.SORT_ASCENDING );
+	this.entityGroup.sort( 'y', Phaser.Group.SORT_ASCENDING );
 
 
 	/* Camera */
 
-	//var fac = 1 - Math.pow( 0.75, Global.game.time.elapsed * 0.06 );
-	//this.camPos.x += ( this.camGoal.x - this.camPos.x ) * fac;
-	//this.camPos.y += ( this.camGoal.y - this.camPos.y ) * fac;
+	if ( this.Player.sprite.goalX + TILE_SIZE/2 > this.camGoal.x + SCREEN_WIDTH - TILE_SIZE ) {
+		this.camGoal.x += TILE_SIZE * (ROOM_WIDTH/2);
+	}
+	if ( this.Player.sprite.goalX + TILE_SIZE/2 < this.camGoal.x + TILE_SIZE ) {
+		this.camGoal.x -= TILE_SIZE * (ROOM_WIDTH/2);
+	}
+	if ( this.Player.sprite.goalY + TILE_SIZE/2 > this.camGoal.y + SCREEN_HEIGHT - TILE_SIZE ) {
+		this.camGoal.y += TILE_SIZE * (ROOM_HEIGHT/2);
+	}
+	if ( this.Player.sprite.goalY + TILE_SIZE/2 < this.camGoal.y + TILE_SIZE ) {
+		this.camGoal.y -= TILE_SIZE * (ROOM_HEIGHT/2);
+	}
 
-	//this.camPos.x = this.Player.sprite.position.x - SCREEN_WIDTH/2;
-	//this.camPos.y = this.Player.sprite.position.y - SCREEN_HEIGHT/2;
+	var fac = 1 - Math.pow( 0.75, Global.game.time.elapsed * 0.06 );
+	this.camPos.x += ( this.camGoal.x - this.camPos.x ) * fac;
+	this.camPos.y += ( this.camGoal.y - this.camPos.y ) * fac;
 
 	var d = this.camPos.distance( this.camGoal );
 	if ( d < 1 && d != 0 )
@@ -69,17 +81,16 @@ World.prototype.update = function ()
 	Global.game.camera.y = Math.round( this.camPos.y );
 
 	if (!this.prevCamPos.equals(this.camPos)) {
-		this.landManager.loadArea( this.camGoal.x, this.camGoal.y );
-		//this.enemyManager.loadArea( this.camGoal.x, this.camGoal.y );
-		//this.cloudManager.loadArea( this.camGoal.x, this.camGoal.y );
+		this.terrainManager.loadArea( this.camGoal.x, this.camGoal.y );
+		this.entityManager.loadArea( this.camGoal.x, this.camGoal.y );
 	}
 
 	this.prevCamPos.x = this.camPos.x;
 	this.prevCamPos.y = this.camPos.y;
 
 
-	this.helpGrid.x = Global.game.camera.x;
-	this.helpGrid.y = Global.game.camera.y;
+	this.helpGrid.x = (Global.game.camera.x.grid()-1) * TILE_SIZE;
+	this.helpGrid.y = (Global.game.camera.y.grid()-1) * TILE_SIZE;
 
 
 	if ( this.shake > 0 )
@@ -105,13 +116,26 @@ World.prototype.pause = function ( isPaused )
 	this.Player.sprite.animations.paused = isPaused;
 }
 
-
-World.prototype.checkCollision = function ( x, y )
-{
-	return this.landManager.checkLandAt( x, y );
-};
-
 World.prototype.cameraShake = function ( value )
 {
 	this.shake = Math.max( Math.round(value), this.shake );
+};
+
+
+World.prototype.checkDirtAt = function ( x, y )
+{
+	return this.terrainManager.checkDirtAt( x, y );
+};
+
+World.prototype.checkCollision = function ( x, y )
+{
+	return this.entityManager.checkCollisionAt( x, y );
+};
+
+World.prototype.createEntity = function ( x, y, entity )
+{
+	if ( this.terrainManager.checkDirtAt( x, y )) {
+		this.entityManager.createEntity( x, y, entity );
+		this.entityManager.loadArea( this.camGoal.x, this.camGoal.y );
+	}
 };

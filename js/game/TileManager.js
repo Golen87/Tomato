@@ -1,10 +1,13 @@
-function TileManager ( tileset )
+function TileManager ( tileset, group=null )
 {
 	this.seed = [randFloat( -10000, 10000 ), randFloat( -10000, 10000 )];
 	this.tileMap = {};
 
 	this.tileset = tileset;
-	this.group = Global.game.add.group();
+	if (group != null)
+		this.group = group;
+	else
+		this.group = Global.game.add.group();
 	this.group.createMultiple( 3*ROOM_WIDTH*ROOM_HEIGHT, tileset, 0, false );
 
 	this.activeSet = new Set();

@@ -20,13 +20,18 @@ Player.prototype.setupAnimation = function ()
 {
 	var len = 1;
 	var idle = [0];
-	this.sprite.animations.add( 'idle_down', idle, 8, true );
+	this.sprite.animations.add( 'idle_down', idle, 8, false );
 	idle = idle.map( n => n + len );
-	this.sprite.animations.add( 'idle_right', idle, 8, true );
+	this.sprite.animations.add( 'idle_right', idle, 8, false );
 	idle = idle.map( n => n + len );
-	this.sprite.animations.add( 'idle_up', idle, 8, true );
+	this.sprite.animations.add( 'idle_up', idle, 8, false );
 	idle = idle.map( n => n + len );
-	this.sprite.animations.add( 'idle_left', idle, 8, true );
+	this.sprite.animations.add( 'idle_left', idle, 8, false );
+
+	idle = idle.map( n => n + len );
+	this.sprite.animations.add( 'hold', idle, 8, false );
+	idle = idle.map( n => n + len );
+	this.sprite.animations.add( 'use', idle, 8, false );
 
 	this.state = 'idle';
 	this.direction = 'down';
@@ -35,15 +40,17 @@ Player.prototype.setupAnimation = function ()
 
 Player.prototype.setAnimation = function ( newState, newDirection )
 {
-	if ( this.damageState == 'dead' )
-		return;
-
 	var name = null;
 	if ( this.state != newState || this.direction != newDirection )
 	{
-		name = '{0}_{1}'.format( newState, newDirection );
-		this.state = newState;
-		this.direction = newDirection;
+		if ( newDirection ) {
+			name = '{0}_{1}'.format( newState, newDirection );
+			this.state = newState;
+			this.direction = newDirection;
+		} else {
+			name = newState;
+			this.state = newState;
+		}
 	}
 
 	if ( name )
@@ -79,6 +86,7 @@ Player.prototype.handleInput = function ()
 
 	for (var key in this.input) {
 		this.input[key].justDown = ( this.input[key].isDown && !this.input[key].wasDown );
+		this.input[key].justUp = ( !this.input[key].isDown && this.input[key].wasDown );
 		this.input[key].holdTimer = this.input[key].isDown ? this.input[key].holdTimer + 1 : 0;
 	}
 };
@@ -86,9 +94,10 @@ Player.prototype.handleInput = function ()
 Player.prototype.resetInput = function ()
 {
 	for (var key in this.input) {
-		this.input[key].wasDown = true;
-		this.input[key].isDown = true;
+		this.input[key].wasDown = false;
+		this.input[key].isDown = false;
 		this.input[key].justDown = false;
+		this.input[key].justUp = false;
 		this.input[key].holdTimer = 0;
 	}
 
@@ -97,8 +106,8 @@ Player.prototype.resetInput = function ()
 
 Player.prototype.update = function ()
 {
-	var gridX = Math.round( ( this.sprite.goalX ) / TILE_SIZE );
-	var gridY = Math.round( ( this.sprite.goalY ) / TILE_SIZE );
+	this.gridX = Math.round( ( this.sprite.goalX ) / TILE_SIZE );
+	this.gridY = Math.round( ( this.sprite.goalY ) / TILE_SIZE );
 	var dx = (this.direction == 'right') - (this.direction == 'left');
 	var dy = (this.direction == 'down') - (this.direction == 'up');
 
@@ -109,6 +118,13 @@ Player.prototype.update = function ()
 	var inputDir = new Phaser.Point( 0, 0 );
 	if ( this.allowInput )
 	{
+		if ( this.input.space.isDown ) {
+			this.setAnimation( 'hold' );
+		}
+		if ( this.input.space.justUp ) {
+			this.useItem();
+		}
+
 		if ( this.input.up.justDown )
 			inputDir.y -= 1;
 		else if ( this.input.down.justDown )
@@ -132,11 +148,11 @@ Player.prototype.update = function ()
 	if ( this.allowInput && this.input[this.direction].holdTimer == 2 ) {
 		this.input[this.direction].holdTimer -= 12;
 
-		if ( !Global.World.checkCollision( gridX + dx, gridY + dy ) ) {
+		if ( !Global.World.checkCollision( this.gridX + dx, this.gridY + dy ) ) {
 			this.sprite.goalX += dx * TILE_SIZE;
 			this.sprite.goalY += dy * TILE_SIZE;
 			//Global.Audio.play( 'boxPush' );
-			//Global.World.revealTile( gridX + dx, gridY + dy );
+			//Global.World.revealTile( this.gridX + dx, this.gridY + dy );
 		}
 	}
 
@@ -146,4 +162,16 @@ Player.prototype.update = function ()
 	this.sprite.y += ( this.sprite.goalY - this.sprite.y ) * fac;
 
 	this.sprite.anchor.y = 0.5 + Math.sin( Global.game.time.totalElapsedSeconds() * 3 * Math.PI ) / 256;
+};
+
+Player.prototype.useItem = function ()
+{
+	Global.World.createEntity( this.gridX, this.gridY, Tiles.Crop );
+	this.setAnimation( 'use' );
+
+	this.allowInput = false;
+	Global.game.time.events.add( Phaser.Timer.SECOND * 1 / 6, function() {
+		this.allowInput = true;
+		this.setAnimation( 'idle', this.direction );
+	}, this );
 };

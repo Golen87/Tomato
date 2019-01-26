@@ -1,4 +1,4 @@
-function LandManager ()
+function TerrainManager ()
 {
 	TileManager.call( this, 'ground' );
 }
@@ -6,7 +6,7 @@ function LandManager ()
 
 /* Tile generation */
 
-LandManager.prototype.generateTile = function ( x, y )
+TerrainManager.prototype.generateTile = function ( x, y )
 {
 	//if ( Math.abs(x) + Math.abs(y) < 1 ) {
 	//	return TileTypes.Grass;
@@ -18,14 +18,14 @@ LandManager.prototype.generateTile = function ( x, y )
 
 	var value = noise.simplex2(x/14 + this.seed[0], y/14 + this.seed[1]);
 
-	if (value > 0.55 || value < -0.6) {
+	if (value > 0.53 || value < -0.6) {
 		return TileTypes.Dirt;
 	}
 
 	return TileTypes.Grass;
 };
 
-LandManager.prototype.addLand = function( x, y, dx, dy, index ) {
+TerrainManager.prototype.addLand = function( x, y, dx, dy, index ) {
 	if (this.isTile( x+dx, y+dy, TileTypes.Dirt )) {
 		var s = this.addSprite( x, y, 0 );
 
@@ -37,7 +37,7 @@ LandManager.prototype.addLand = function( x, y, dx, dy, index ) {
 	}
 };
 
-LandManager.prototype.addLandEdge = function( x, y, dx, dy, index ) {
+TerrainManager.prototype.addLandEdge = function( x, y, dx, dy, index ) {
 	if (this.isTile( x+dx, y+dy, TileTypes.Dirt ) && !this.isTile( x+dx, y, TileTypes.Dirt ) && !this.isTile( x, y+dy, TileTypes.Dirt )) {
 		var s = this.addSprite( x, y, 0 );
 
@@ -49,7 +49,7 @@ LandManager.prototype.addLandEdge = function( x, y, dx, dy, index ) {
 	}
 };
 
-LandManager.prototype.addLandCorner = function( x, y, dx, dy, index ) {
+TerrainManager.prototype.addLandCorner = function( x, y, dx, dy, index ) {
 	if (this.isTile( x+dx, y, TileTypes.Dirt ) && this.isTile( x, y+dy, TileTypes.Dirt )) {
 		var s = this.addSprite( x, y, 0 );
 
@@ -61,7 +61,7 @@ LandManager.prototype.addLandCorner = function( x, y, dx, dy, index ) {
 	}
 };
 
-LandManager.prototype.createTile = function( x, y ) {
+TerrainManager.prototype.createTile = function( x, y ) {
 	if ( this.isTile( x, y, TileTypes.Dirt ) ) {
 		var index = 0;
 		index += 1 * this.isTile( x+1, y, TileTypes.Dirt ); // Right
@@ -80,10 +80,9 @@ LandManager.prototype.createTile = function( x, y ) {
 
 /* World building */
 
-LandManager.prototype.checkLandAt = function ( x, y )
+TerrainManager.prototype.checkDirtAt = function ( x, y )
 {
-	return false;
-	//return this.getTile(x,y) == TileTypes.Dirt;
+	return this.getTile(x,y) == TileTypes.Dirt;
 };
 
-extend( TileManager, LandManager );
+extend( TileManager, TerrainManager );

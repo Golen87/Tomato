@@ -31,14 +31,11 @@ Global.Game.prototype =
 		*/
 
 
-		Global.game.world.bringToTop( Global.World.landManager.group );
-		//Global.game.world.bringToTop( Global.World.enemyManager.group );
+		Global.game.world.bringToTop( Global.World.terrainManager.group );
+		//Global.game.world.bringToTop( Global.World.entityManager.group );
 		Global.game.world.bringToTop( Global.World.helpGrid );
 		Global.game.world.bringToTop( Global.World.entityGroup );
 		//Global.game.world.bringToTop( Global.Light.lightGroup );
-		//Global.game.world.bringToTop( Global.World.cloudManager.shadowGroup );
-		//Global.game.world.bringToTop( Global.World.cloudManager.group );
-		//Global.game.world.bringToTop( Global.World.bubbleGroup );
 		//Global.game.world.bringToTop( Global.Gui.group );
 	},
 
