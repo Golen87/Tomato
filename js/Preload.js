@@ -4,7 +4,7 @@ Global.Preload = function() {};
 Global.Preload.prototype = {
 	preload: function () {
 		
-		this.game.stage.backgroundColor = '#AAAAAA';
+		this.game.stage.backgroundColor = '#33333A';
 
 		// Load game assets
 		
@@ -32,6 +32,7 @@ Global.Preload.prototype = {
 		this.load.audio( 'walking_grass', 'assets/sounds/Walking_Grass.ogg' );
 		this.load.audio( 'walking_dirt', 'assets/sounds/Walking_Dirt.ogg' );
 		this.load.audio( 'menu_inventory', 'assets/sounds/Menu_Inventory.ogg' );
+		this.load.audio( 'digging_dirt', 'assets/sounds/Digging_Dirt.ogg' );
 
 		//this.load.audio( 'menu', 'assets/sounds/menu.ogg' );
 
@@ -42,7 +43,6 @@ Global.Preload.prototype = {
 		var y = this.game.world.centerY;
 		var progressBg = this.game.add.sprite( x, y, 'preloader-bar' );
 		var progressFg = this.game.add.sprite( x, y, 'preloader-bar' );
-		progressBg.tint = 0x000000;
 		progressBg.scale.set( scale );
 		progressBg.anchor.setTo( 0, 0.5 );
 		progressFg.scale.set( scale );

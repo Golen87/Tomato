@@ -159,6 +159,8 @@ EntityManager.prototype.createCrop = function ( x, y, entity )
 		this.tileMap[p] = crop;
 		this.cropInstances.push( crop );
 
+		Global.Audio.play( 'digging_dirt' );
+
 		var key = x + "," + y;
 		this.activeSet.delete(key);
 	}
