@@ -33,7 +33,7 @@ function clamp( value, min, max ) {
 };
 
 Number.prototype.grid = function() {
-	return Math.round( this / 16 );
+	return Math.round( this / TILE_SIZE );
 };
 
 Array.prototype.choice = function() {

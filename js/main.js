@@ -1,8 +1,8 @@
 var Global = Global || {};
 
-const TILE_SIZE = 64;
+const TILE_SIZE = 128;
 const ROOM_WIDTH = 12;
-const ROOM_HEIGHT = 8;
+const ROOM_HEIGHT = 10;
 const SCREEN_WIDTH = ROOM_WIDTH * TILE_SIZE;
 const SCREEN_HEIGHT = ROOM_HEIGHT * TILE_SIZE;
 
@@ -28,7 +28,7 @@ Global.game.state.add( 'Credits', Global.Credits );
 Global.game.state.start( 'Boot' );
 
 Global.input = {};
-Global.inputScale = new Phaser.Point( 0, 0 );
+Global.inputScale = new Phaser.Point( 1, 1 );
 Global.inputOffset = new Phaser.Point( 0, 0 );
 
 Global.paused = false;

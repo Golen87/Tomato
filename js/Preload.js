@@ -20,12 +20,12 @@ Global.Preload.prototype = {
 		this.load.bitmapFont( '04b24', 'assets/fonts/04b24/font.png', 'assets/fonts/04b24/font.fnt' ); // 8
 
 		this.load.image( 'tile', 'assets/sprites/tile.png' );
+		this.load.image( 'bush', 'assets/sprites/bush.png' );
 		this.load.image( 'tree', 'assets/sprites/tree.png' );
 
 		this.load.spritesheet( 'player', 'assets/sprites/shiba.png', 128, 256 );
-		this.load.spritesheet( 'tomato', 'assets/sprites/tomato.png', 64, 128 );
-		//this.load.spritesheet( 'tileset', 'assets/sprites/tileset.png', 16, 16 );
-		//this.load.spritesheet( 'fire', 'assets/sprites/fire.png', 16, 16 );
+		this.load.spritesheet( 'ground', 'assets/sprites/ground.png', 128, 128 );
+		this.load.spritesheet( 'tomato', 'assets/sprites/tomato.png', 128, 256 );
 
 		//this.load.audio( 'footsteps', 'assets/sounds/footsteps.ogg' );
 
@@ -33,7 +33,7 @@ Global.Preload.prototype = {
 
 
 		// Loading progress bar
-		var scale = 4;
+		var scale = 8;
 		var x = this.game.world.centerX - this.game.cache.getImage( 'preloader-bar' ).width / 2 * scale;
 		var y = this.game.world.centerY;
 		var progressBg = this.game.add.sprite( x, y, 'preloader-bar' );

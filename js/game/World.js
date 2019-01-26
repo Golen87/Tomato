@@ -5,23 +5,19 @@ World.prototype.create = function ()
 	Global.game.world.setBounds( -Infinity, -Infinity, Infinity, Infinity );
 	//Global.game.world.setBounds( -10, -10, 10, 10 );
 
-	this.tileBg = Global.game.add.tileSprite( 0, 0, ROOM_WIDTH * TILE_SIZE, ROOM_HEIGHT * TILE_SIZE, 'tile' );
-	this.tileBg.alpha = 0.1;
+	this.helpGrid = Global.game.add.tileSprite( 0, 0, ROOM_WIDTH * TILE_SIZE, ROOM_HEIGHT * TILE_SIZE, 'tile' );
+	this.helpGrid.alpha = 0.1;
 
 	this.entityGroup = Global.game.add.group();
 	this.bubbleGroup = Global.game.add.group();
 
 	this.Player = new Player();
 	this.Player.create(
-		0, 0,
+		TILE_SIZE*4, TILE_SIZE*4,
 		this.entityGroup
 	);
 
-	/*
-
 	this.landManager = new LandManager();
-	this.enemyManager = new EnemyManager();
-	this.cloudManager = new CloudManager();
 
 	this.camGoal = new Phaser.Point();
 	this.camGoal.x = 0;
@@ -42,11 +38,6 @@ World.prototype.create = function ()
 	Global.game.camera.x = Math.round( this.camPos.x );
 
 	this.landManager.loadArea( this.camGoal.x, this.camGoal.y );
-	this.enemyManager.loadArea( this.camGoal.x, this.camGoal.y );
-	this.cloudManager.loadArea( this.camGoal.x, this.camGoal.y );
-
-	this.Player.updateCount();
-	*/
 };
 
 World.prototype.update = function ()
@@ -57,14 +48,13 @@ World.prototype.update = function ()
 
 
 	/* Camera */
-	/*
 
 	//var fac = 1 - Math.pow( 0.75, Global.game.time.elapsed * 0.06 );
 	//this.camPos.x += ( this.camGoal.x - this.camPos.x ) * fac;
 	//this.camPos.y += ( this.camGoal.y - this.camPos.y ) * fac;
 
-	this.camPos.x = this.Player.sprite.position.x - SCREEN_WIDTH/2;
-	this.camPos.y = this.Player.sprite.position.y - SCREEN_HEIGHT/2;
+	//this.camPos.x = this.Player.sprite.position.x - SCREEN_WIDTH/2;
+	//this.camPos.y = this.Player.sprite.position.y - SCREEN_HEIGHT/2;
 
 	var d = this.camPos.distance( this.camGoal );
 	if ( d < 1 && d != 0 )
@@ -80,20 +70,16 @@ World.prototype.update = function ()
 
 	if (!this.prevCamPos.equals(this.camPos)) {
 		this.landManager.loadArea( this.camGoal.x, this.camGoal.y );
-		this.enemyManager.loadArea( this.camGoal.x, this.camGoal.y );
-		this.cloudManager.loadArea( this.camGoal.x, this.camGoal.y );
+		//this.enemyManager.loadArea( this.camGoal.x, this.camGoal.y );
+		//this.cloudManager.loadArea( this.camGoal.x, this.camGoal.y );
 	}
 
 	this.prevCamPos.x = this.camPos.x;
 	this.prevCamPos.y = this.camPos.y;
 
 
-	this.oceanBg.x = 16 * Math.round(this.camPos.x / 16) - 16;
-	this.oceanBg.y = 16 * Math.round(this.camPos.y / 16) - 16;
-	this.oceanBg.x += 1.1 * Math.sin( 0.7 * Global.game.time.totalElapsedSeconds() * Math.PI );
-
-	this.helpGrid.x = this.Player.sprite.goalX - SCREEN_WIDTH/2;
-	this.helpGrid.y = this.Player.sprite.goalY - SCREEN_HEIGHT/2;
+	this.helpGrid.x = Global.game.camera.x;
+	this.helpGrid.y = Global.game.camera.y;
 
 
 	if ( this.shake > 0 )
@@ -112,7 +98,6 @@ World.prototype.update = function ()
 
 		this.shake -= 1;
 	}
-	*/
 };
 
 World.prototype.pause = function ( isPaused )
@@ -123,8 +108,7 @@ World.prototype.pause = function ( isPaused )
 
 World.prototype.checkCollision = function ( x, y )
 {
-	return false;
-	//return this.landManager.checkLandAt( x, y );
+	return this.landManager.checkLandAt( x, y );
 };
 
 World.prototype.cameraShake = function ( value )

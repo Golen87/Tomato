@@ -4,10 +4,9 @@ Player.prototype.create = function ( x, y, playerGroup )
 {
 	this.sprite = playerGroup.create( x, y, 'player', 0 );
 	this.sprite.anchor.set( 0, 0.5 );
-	this.sprite.scale.set( 0.5 );
 
-	this.sprite.goalX = 0;
-	this.sprite.goalY = 0;
+	this.sprite.goalX = x;
+	this.sprite.goalY = y;
 	this.prevGridPos = new Phaser.Point(0, 0);
 	this.gridPos = new Phaser.Point(0, 0);
 
@@ -30,7 +29,7 @@ Player.prototype.setupAnimation = function ()
 	this.sprite.animations.add( 'idle_left', idle, 8, true );
 
 	this.state = 'idle';
-	this.direction = 'right';
+	this.direction = 'down';
 	this.sprite.animations.play( 'idle_down' );
 };
 
@@ -130,8 +129,8 @@ Player.prototype.update = function ()
 		this.setAnimation( 'idle', direction );
 	}
 
-	if ( this.allowInput && this.input[this.direction].holdTimer == 3 ) {
-		this.input[this.direction].holdTimer -= 24;
+	if ( this.allowInput && this.input[this.direction].holdTimer == 2 ) {
+		this.input[this.direction].holdTimer -= 12;
 
 		if ( !Global.World.checkCollision( gridX + dx, gridY + dy ) ) {
 			this.sprite.goalX += dx * TILE_SIZE;
@@ -146,5 +145,5 @@ Player.prototype.update = function ()
 	this.sprite.x += ( this.sprite.goalX - this.sprite.x ) * fac;
 	this.sprite.y += ( this.sprite.goalY - this.sprite.y ) * fac;
 
-	//this.sprite.anchor.y = 0.5/* + Math.sin( Global.game.time.totalElapsedSeconds() * 16 * Math.PI ) / 256*/ - this.input[this.direction].isDown / 64;
+	this.sprite.anchor.y = 0.5 + Math.sin( Global.game.time.totalElapsedSeconds() * 3 * Math.PI ) / 256;
 };

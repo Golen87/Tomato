@@ -28,18 +28,18 @@ Global.Game.prototype =
 		this.holdPosition = new Phaser.Point( 0, 0 );
 
 		Global.togglePause = Global.Game.prototype.togglePause.bind( this );
+		*/
 
 
 		Global.game.world.bringToTop( Global.World.landManager.group );
-		Global.game.world.bringToTop( Global.World.enemyManager.group );
+		//Global.game.world.bringToTop( Global.World.enemyManager.group );
 		Global.game.world.bringToTop( Global.World.helpGrid );
-		Global.game.world.bringToTop( Global.World.playerGroup );
-		Global.game.world.bringToTop( Global.Light.lightGroup );
-		Global.game.world.bringToTop( Global.World.cloudManager.shadowGroup );
-		Global.game.world.bringToTop( Global.World.cloudManager.group );
-		Global.game.world.bringToTop( Global.World.bubbleGroup );
-		Global.game.world.bringToTop( Global.Gui.group );
-		*/
+		Global.game.world.bringToTop( Global.World.entityGroup );
+		//Global.game.world.bringToTop( Global.Light.lightGroup );
+		//Global.game.world.bringToTop( Global.World.cloudManager.shadowGroup );
+		//Global.game.world.bringToTop( Global.World.cloudManager.group );
+		//Global.game.world.bringToTop( Global.World.bubbleGroup );
+		//Global.game.world.bringToTop( Global.Gui.group );
 	},
 
 	update: function()

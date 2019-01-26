@@ -37,7 +37,7 @@ TileManager.prototype.addSpriteToGroup = function ( group, x, y, pos )
 	var s = group.getFirstDead();
 	if ( s )
 	{
-		s.reset( 16*x, 16*y );
+		s.reset( TILE_SIZE*x, TILE_SIZE*y );
 		s.frame = posToIndex( this.tileset, pos );
 		s.key = x + "," + y;
 		s.alpha = 1.0;
@@ -61,10 +61,10 @@ TileManager.prototype.addSprite = function ( x, y, pos )
 TileManager.prototype.isInView = function ( x, y )
 {
 	return (
-		x >= Global.game.camera.x - 16 - 16 &&
-		y >= Global.game.camera.y - 16 - 16 &&
-		x < Global.game.camera.x + 16 * ROOM_WIDTH + 16 &&
-		y < Global.game.camera.y + 16 * ROOM_HEIGHT + 16
+		x >= Global.game.camera.x - TILE_SIZE - TILE_SIZE &&
+		y >= Global.game.camera.y - TILE_SIZE - TILE_SIZE &&
+		x < Global.game.camera.x + TILE_SIZE * ROOM_WIDTH + TILE_SIZE &&
+		y < Global.game.camera.y + TILE_SIZE * ROOM_HEIGHT + TILE_SIZE
 	);
 };
 
@@ -85,14 +85,13 @@ TileManager.prototype.loadArea = function ( worldX, worldY )
 {
 	this.clearOutOfView();
 
-	var startX = Global.game.camera.x - 16;
-	var startY = Global.game.camera.y - 16;
-	var endX = Global.game.camera.x + 16 * ROOM_WIDTH + 16;
-	var endY = Global.game.camera.y + 16 * ROOM_HEIGHT + 16;
+	var startX = Global.game.camera.x - TILE_SIZE;
+	var startY = Global.game.camera.y - TILE_SIZE;
+	var endX = Global.game.camera.x + TILE_SIZE * ROOM_WIDTH + TILE_SIZE;
+	var endY = Global.game.camera.y + TILE_SIZE * ROOM_HEIGHT + TILE_SIZE;
 
 	for ( var y = startY.grid(); y < endY.grid(); y++ ) {
 		for ( var x = startX.grid(); x < endX.grid(); x++ ) {
-
 			var key = x + "," + y;
 			if ( !this.activeSet.has(key) ) {
 				this.activeSet.add(key);

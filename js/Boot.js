@@ -13,19 +13,16 @@ Global.Boot.prototype = {
 
 		//this.game.add.plugin(Phaser.Plugin.Debug);
 
-		this.rescale();
-		this.game.scale.setResizeCallback(function () {
-			this.rescale();
-		}, this);
+		Global.game.scale.scaleMode = Phaser.ScaleManager.SHOW_ALL;
+		Global.game.scale.setShowAll();
+		window.addEventListener('resize', function () {
+			Global.game.scale.refresh();
+		});
+		Global.game.scale.refresh();
 
 		this.readSettings();
 
 		this.state.start( 'Preload' );
-	},
-
-	rescale: function() {
-		Global.inputScale.x = 1;
-		Global.inputScale.y = 1;
 	},
 
 	readSettings: function() {

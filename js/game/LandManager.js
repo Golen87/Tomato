@@ -1,6 +1,6 @@
 function LandManager ()
 {
-	TileManager.call( this, 'tileset' );
+	TileManager.call( this, 'ground' );
 }
 
 
@@ -8,28 +8,28 @@ function LandManager ()
 
 LandManager.prototype.generateTile = function ( x, y )
 {
-	if ( Math.abs(x) + Math.abs(y) < 3 ) {
-		return TileTypes.Water;
-	}
-
-	//if ( x < -6 || x > 6 || y < -6 || y > 6 ) {
-	//	return TileTypes.Land;
+	//if ( Math.abs(x) + Math.abs(y) < 1 ) {
+	//	return TileTypes.Grass;
 	//}
 
-	var value = noise.simplex2(x/10 + this.seed[0], y/10 + this.seed[1]);
+	//if ( x < -6 || x > 6 || y < -6 || y > 6 ) {
+	//	return TileTypes.Dirt;
+	//}
+
+	var value = noise.simplex2(x/14 + this.seed[0], y/14 + this.seed[1]);
 
 	if (value > 0.55 || value < -0.6) {
-		return TileTypes.Land;
+		return TileTypes.Dirt;
 	}
 
-	return TileTypes.Water;
+	return TileTypes.Grass;
 };
 
 LandManager.prototype.addLand = function( x, y, dx, dy, index ) {
-	if (this.isTile( x+dx, y+dy, TileTypes.Land )) {
+	if (this.isTile( x+dx, y+dy, TileTypes.Dirt )) {
 		var s = this.addSprite( x, y, 0 );
 
-		var frames = Tiles.Land.pos[index].toIndex( this.tileset );
+		var frames = Tiles.Dirt.pos[index].toIndex( this.tileset );
 		s.animations.add( 'idle', frames, 1, true );
 		s.animations.play( 'idle' );
 
@@ -38,10 +38,10 @@ LandManager.prototype.addLand = function( x, y, dx, dy, index ) {
 };
 
 LandManager.prototype.addLandEdge = function( x, y, dx, dy, index ) {
-	if (this.isTile( x+dx, y+dy, TileTypes.Land ) && !this.isTile( x+dx, y, TileTypes.Land ) && !this.isTile( x, y+dy, TileTypes.Land )) {
+	if (this.isTile( x+dx, y+dy, TileTypes.Dirt ) && !this.isTile( x+dx, y, TileTypes.Dirt ) && !this.isTile( x, y+dy, TileTypes.Dirt )) {
 		var s = this.addSprite( x, y, 0 );
 
-		var frames = Tiles.Land.pos[index].toIndex( this.tileset );
+		var frames = Tiles.Dirt.pos[index].toIndex( this.tileset );
 		s.animations.add( 'idle', frames, 1, true );
 		s.animations.play( 'idle' );
 
@@ -50,10 +50,10 @@ LandManager.prototype.addLandEdge = function( x, y, dx, dy, index ) {
 };
 
 LandManager.prototype.addLandCorner = function( x, y, dx, dy, index ) {
-	if (this.isTile( x+dx, y, TileTypes.Land ) && this.isTile( x, y+dy, TileTypes.Land )) {
+	if (this.isTile( x+dx, y, TileTypes.Dirt ) && this.isTile( x, y+dy, TileTypes.Dirt )) {
 		var s = this.addSprite( x, y, 0 );
 
-		var frames = Tiles.Land.pos[index].toIndex( this.tileset );
+		var frames = Tiles.Dirt.pos[index].toIndex( this.tileset );
 		s.animations.add( 'idle', frames, 1, true );
 		s.animations.play( 'idle' );
 
@@ -62,24 +62,18 @@ LandManager.prototype.addLandCorner = function( x, y, dx, dy, index ) {
 };
 
 LandManager.prototype.createTile = function( x, y ) {
-	if ( this.isTile( x, y, TileTypes.Water ) ) {
-		this.addLandEdge(x, y, +1, -1, 6);
-		this.addLandEdge(x, y, -1, -1, 8);
-		this.addLand(x, y, +0, -1, 7);
-		this.addLand(x, y, +1, +0, 3);
-		this.addLand(x, y, -1, +0, 5);
-		this.addLandEdge(x, y, +1, +1, 0);
-		this.addLandEdge(x, y, -1, +1, 2);
-		this.addLand(x, y, +0, +1, 1);
+	if ( this.isTile( x, y, TileTypes.Dirt ) ) {
+		var index = 0;
+		index += 1 * this.isTile( x+1, y, TileTypes.Dirt ); // Right
+		index += 2 * this.isTile( x, y+1, TileTypes.Dirt ); // Down
+		index += 4 * this.isTile( x-1, y, TileTypes.Dirt ); // Left
+		index += 8 * this.isTile( x, y-1, TileTypes.Dirt ); // Up
 
-		this.addLandCorner(x, y, +1, +1, 9);
-		this.addLandCorner(x, y, -1, +1, 10);
-		this.addLandCorner(x, y, +1, -1, 11);
-		this.addLandCorner(x, y, -1, -1, 12);
+		this.addSprite( x, y, Tiles.Dirt.pos[index] );
 	}
 
-	if ( this.isTile( x, y, TileTypes.Land ) ) {
-		this.addLand( x, y, 0, 0, [4,4,4,13].choice() );
+	if ( this.isTile( x, y, TileTypes.Grass ) ) {
+		this.addSprite( x, y, Tiles.Grass.pos.choice() );
 	}
 };
 
@@ -88,7 +82,8 @@ LandManager.prototype.createTile = function( x, y ) {
 
 LandManager.prototype.checkLandAt = function ( x, y )
 {
-	return this.getTile(x,y) == TileTypes.Land;
+	return false;
+	//return this.getTile(x,y) == TileTypes.Dirt;
 };
 
 extend( TileManager, LandManager );
