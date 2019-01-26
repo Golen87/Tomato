@@ -29,7 +29,7 @@ Global.Preload.prototype = {
 		this.load.spritesheet( 'tomato', 'assets/sprites/tomato.png', 128, 256 );
 		this.load.spritesheet( 'items', 'assets/sprites/tomato.png', 128, 128 );
 
-		//this.load.audio( 'footsteps', 'assets/sounds/footsteps.ogg' );
+		this.load.audio( 'walking_grass', 'assets/sounds/Walking_Grass.ogg' );
 
 		//this.load.audio( 'menu', 'assets/sounds/menu.ogg' );
 

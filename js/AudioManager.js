@@ -2,16 +2,19 @@ function AudioManager()
 {
 	this.sounds = {};
 
-	var name = 'footsteps';
-	var vol = 0.05;
+	var name = 'walking_grass';
+	var vol = 0.1;
 	this.sounds[name] = {};
 	this.sounds[name].sound = Global.game.add.audio( name );
-	this.sounds[name].sound.addMarker( '1', 0.0, 0.3, vol );
-	this.sounds[name].sound.addMarker( '2', 0.4, 0.3, vol );
-	this.sounds[name].sound.addMarker( '3', 0.8, 0.3, vol );
-	this.sounds[name].sound.addMarker( '4', 1.2, 0.3, vol );
+	this.sounds[name].sound.addMarker( '1', 0.000, 0.42, vol );
+	this.sounds[name].sound.addMarker( '2', 0.460, 0.42, vol );
+	this.sounds[name].sound.addMarker( '3', 0.920, 0.42, vol );
+	this.sounds[name].sound.addMarker( '4', 1.380, 0.42, vol );
+	this.sounds[name].sound.addMarker( '5', 1.840, 0.42, vol );
+	this.sounds[name].sound.addMarker( '6', 2.300, 0.42, vol );
 	this.sounds[name].markers = ['1', '2', '3', '4'];
 
+	/*
 	var name = 'swing';
 	var vol = 0.15;
 	this.sounds[name] = {};
@@ -255,6 +258,7 @@ function AudioManager()
 	this.sounds[name].sound = Global.game.add.audio( name );
 	this.sounds[name].sound.volume = vol;
 	this.sounds[name].sound.loop = true;
+	*/
 };
 
 AudioManager.prototype.getMarkers = function ( name, marker=null )

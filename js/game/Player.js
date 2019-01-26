@@ -151,7 +151,7 @@ Player.prototype.update = function ()
 		if ( !Global.World.checkCollision( this.gridX + dx, this.gridY + dy ) ) {
 			this.sprite.goalX += dx * TILE_SIZE;
 			this.sprite.goalY += dy * TILE_SIZE;
-			//Global.Audio.play( 'boxPush' );
+			Global.Audio.play( 'walking_grass' );
 			//Global.World.revealTile( this.gridX + dx, this.gridY + dy );
 		}
 	}
