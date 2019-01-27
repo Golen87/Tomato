@@ -12,35 +12,36 @@ GuiManager.prototype.create = function ()
 	this.menuManager.allowInput = false;
 
 
-	/* Life GUI */
+	/* Inventory */
 
-	this.lifeGui = this.group.create( 0, 0, 'hud' );
-	this.lifeGui.anchor.setTo( 1.0, 1.0 );
+	this.invAnchor = this.group.create( 0, 0, null );
+	this.invAnchor.alpha = 0.0;
 
-	this.lifeSize = 3;
-	this.lifePoint = Array( this.lifeSize );
-	for ( var i = 0; i < this.lifeSize; i++ )
-	{
-		this.lifePoint[i] = this.group.create( 0, 0, 'life' );
-		this.lifePoint[i].anchor.setTo( 1.0, 1.0 );
+	var offsetX = TILE_SIZE * (ROOM_WIDTH/2-3);
+	var offsetY = TILE_SIZE * (ROOM_HEIGHT/2-2.5);
+	this.invFg = this.group.create( offsetX, offsetY, 'inventory' );
+	this.invBg = Global.game.add.graphics( 0, 0 );
+	this.invBg.beginFill( 0x000000, 0.7 );
+	this.invBg.drawRect( 0, 0, SCREEN_WIDTH, SCREEN_HEIGHT );
+	this.invBg.endFill();
+	//this.group.add( this.invBg );
+	this.invAnchor.addChild( this.invBg );
+	this.invAnchor.addChild( this.invFg );
+
+	this.invCursor = this.invAnchor.addChild( this.group.create( offsetX + 1*TILE_SIZE, offsetY + 1*TILE_SIZE, 'tile' ) );
+
+	this.invSize = [4,3];
+	this.invSlots = Array( this.invSize );
+	for ( var i = 0; i < this.invSize[0] * this.invSize[1]; i++ ) {	
+		//this.invSlots[i] = this.group.create( 0, 0, 'items' );
+		var x = 1 + i % this.invSize[0];
+		var y = 1 + Math.floor( i / this.invSize[0] );
+		this.invSlots[i] = this.invFg.addChild( this.group.create( x*TILE_SIZE, y*TILE_SIZE, 'items' ) );
 	}
 
 
-	/* Ammo GUI */
-
-	this.ammoGui = this.group.create( 0, 0, 'small-hud' );
-	this.ammoGui.anchor.setTo( 0.0, 1.0 );
-
-	this.ammoIcon = this.group.create( 0, 0, 'harpoon-icon' );
-	this.ammoIcon.anchor.setTo( 0.0, 1.0 );
-
-	this.ammoCount = Global.game.add.bitmapText( 0, 0, 'Pixelade', '10', 2*13, this.group );
-	this.ammoCount.anchor.setTo( 0.5, 0.5 );
-	Global.World.Player.updateAmmoCount();
-
-
 	/* Score GUI */
-
+	/*
 	this.scoreGui = this.group.create( 0, 0, 'hud' );
 	this.scoreGui.anchor.setTo( 0.0, 0.0 );
 
@@ -50,40 +51,22 @@ GuiManager.prototype.create = function ()
 	this.highscoreCount = Global.game.add.bitmapText( 0, 0, '04b24', 'Highscore: 123', 8, this.group );
 	this.highscoreCount.anchor.setTo( 0.0, 0.0 );
 	this.highscoreCount.tint = 0xBBBBBB;
-
-	Global.World.Player.awardScore( 0 );
+	*/
 };
 
 GuiManager.prototype.update = function ()
 {
 	this.menuManager.update();
 
-	this.lifeGui.x = Global.game.camera.view.x + SCREEN_WIDTH;
-	this.lifeGui.y = Global.game.camera.view.y + SCREEN_HEIGHT;
+	this.invAnchor.x = Global.game.camera.view.x;
+	this.invAnchor.y = Global.game.camera.view.y;
 
-	for ( var i = 0; i < this.lifeSize; i++ )
+	/*for ( var i = 0; i < this.invSize; i++ )
 	{
-		this.lifePoint[i].x = Global.game.camera.view.x + SCREEN_WIDTH - 4 - 22 * ( i );
-		this.lifePoint[i].y = Global.game.camera.view.y + SCREEN_HEIGHT - 2;
+		this.invSlots[i].x = Global.game.camera.view.x + SCREEN_WIDTH - 4 - 22 * ( i );
+		this.invSlots[i].y = Global.game.camera.view.y + SCREEN_HEIGHT - 2;
 	}
-
-	this.ammoGui.x = Global.game.camera.view.x;
-	this.ammoGui.y = Global.game.camera.view.y + SCREEN_HEIGHT;
-
-	this.ammoIcon.x = Global.game.camera.view.x + 4;
-	this.ammoIcon.y = Global.game.camera.view.y + SCREEN_HEIGHT - 3;
-
-	this.ammoCount.x = Global.game.camera.view.x + 30;
-	this.ammoCount.y = Global.game.camera.view.y + SCREEN_HEIGHT - 12;
-
-	this.scoreGui.x = Global.game.camera.view.x;
-	this.scoreGui.y = Global.game.camera.view.y;
-
-	this.scoreCount.x = Global.game.camera.view.x + 5;
-	this.scoreCount.y = Global.game.camera.view.y + 0;
-
-	this.highscoreCount.x = Global.game.camera.view.x + 5;
-	this.highscoreCount.y = Global.game.camera.view.y + 12;
+	*/
 };
 
 
@@ -224,4 +207,15 @@ GuiManager.prototype.showGameOver = function ()
 		this.menuManager.allowInput = true;
 		this.menuManager.createMenu( x, y, this.gameoverMenu );
 	}, this );
+};
+
+
+GuiManager.prototype.showInventory = function ()
+{
+	this.invAnchor.alpha = 1.0;
+};
+
+GuiManager.prototype.hideInventory = function ()
+{
+	this.invAnchor.alpha = 0.0;
 };

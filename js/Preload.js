@@ -21,13 +21,16 @@ Global.Preload.prototype = {
 
 		this.load.image( 'tile', 'assets/sprites/tile.png' );
 		this.load.image( 'tree', 'assets/sprites/tree.png' );
+		this.load.image( 'inventory', 'assets/sprites/inventory.png' );
+		this.load.image( 'glow', 'assets/sprites/glow.png' );
+		this.load.image( 'torchlight', 'assets/sprites/torchlight.png' );
 
 		this.load.spritesheet( 'player', 'assets/sprites/player.png', 128, 256 );
-		//this.load.spritesheet( 'player', 'assets/sprites/shiba.png', 128, 256 );
 		this.load.spritesheet( 'ground', 'assets/sprites/ground.png', 128, 128 );
+		this.load.spritesheet( 'soil', 'assets/sprites/soil.png', 128, 128 );
 		this.load.spritesheet( 'bush', 'assets/sprites/bush.png', 384, 256 );
-		this.load.spritesheet( 'tomato', 'assets/sprites/tomato2.png', 128, 256 );
-		this.load.spritesheet( 'items', 'assets/sprites/tomato.png', 128, 128 );
+		this.load.spritesheet( 'tomato', 'assets/sprites/tomato.png', 128, 256 );
+		this.load.spritesheet( 'items', 'assets/sprites/items.png', 128, 128 );
 
 		this.load.audio( 'music', 'assets/sounds/Music.wav' );
 		this.load.audio( 'ambience', 'assets/sounds/Ambience.ogg' );
@@ -35,9 +38,11 @@ Global.Preload.prototype = {
 		this.load.audio( 'walking_grass', 'assets/sounds/Walking_Grass.ogg' );
 		this.load.audio( 'walking_dirt', 'assets/sounds/Walking_Dirt.ogg' );
 		this.load.audio( 'menu_inventory', 'assets/sounds/Menu_Inventory.ogg' );
-		this.load.audio( 'digging_dirt', 'assets/sounds/Digging_Dirt.ogg' );
+		this.load.audio( 'digging_dirt', 'assets/sounds/Digging_Dirt.ogg' ); // !!!!!!!
 		this.load.audio( 'planting_seed', 'assets/sounds/Planting_Seed.ogg' );
 		this.load.audio( 'grow_pop', 'assets/sounds/Grow_Pop.ogg' );
+		this.load.audio( 'harvest_tomato', 'assets/sounds/Harvest_Tomato.ogg' ); // !!!!!!!!!
+		this.load.audio( 'watering_crops', 'assets/sounds/Watering_Crops.ogg' ); // !!!!!!!!!
 
 
 		// Loading progress bar

@@ -51,10 +51,16 @@ const CropTypes = {
 				'frame': 6,
 				'time': [10,20],
 				'type': GrowthType.WaterOrWither,
-				'next': 'withered',
+				'next': 'withered_1',
 			},
-			'withered': {
+			'withered_1': {
 				'frame': 7,
+				'time': [10,20],
+				'type': GrowthType.WaterOrWither,
+				'next': 'withered_1',
+			},
+			'withered_2': {
+				'frame': 8,
 				'type': GrowthType.None,
 			},
 		},

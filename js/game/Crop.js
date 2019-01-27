@@ -19,6 +19,9 @@ Crop.prototype.init = function ( sprite, x, y )
 	this.sprite.alpha = 1.0;
 	this.sprite.scale.set( 1 );
 
+	//if ( (x+y) % 2 == 0 )
+	//	this.sprite.scale.x = -1;
+
 	this.updateSprite();
 };
 
@@ -50,10 +53,7 @@ Crop.prototype.grow = function ()
 			this.lifetime = this.getLifetime();
 		}
 
-		if ( this.sprite ) {
-			Global.Audio.play( 'grow_pop' );
-			this.updateSprite();
-		}
+		this.updateSprite();
 	}
 };
 
@@ -67,5 +67,8 @@ Crop.prototype.updateSprite = function ( power )
 {
 	if ( this.sprite ) {
 		this.sprite.frame = this.getStage().frame;
+		Global.Audio.play( 'grow_pop' );
+		this.sprite.tint = 0xffffff;
+		//Global.game.add.tween( this.sprite.scale ).to({ y: 1.0 }, 1000, Phaser.Easing.Linear.Out, true );
 	}
 }

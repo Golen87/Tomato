@@ -14,13 +14,12 @@ Global.Game.prototype =
 		Global.Audio.play( 'ambience' );
 		Global.Audio.play( 'music' );
 
+		Global.Light.create();
+		Global.Gui.create();
+
 		this.World = new World();
 		Global.World = this.World;
 		this.World.create();
-
-		/*
-		Global.Light.create();
-		Global.Gui.create();
 
 		var key = Global.game.input.keyboard.addKey( Phaser.Keyboard.ESC );
 		key.onDown.add( this.togglePause, this );
@@ -31,15 +30,13 @@ Global.Game.prototype =
 		this.holdPosition = new Phaser.Point( 0, 0 );
 
 		Global.togglePause = Global.Game.prototype.togglePause.bind( this );
-		*/
 
 
 		Global.game.world.bringToTop( Global.World.terrainManager.group );
-		//Global.game.world.bringToTop( Global.World.entityManager.group );
 		Global.game.world.bringToTop( Global.World.helpGrid );
 		Global.game.world.bringToTop( Global.World.entityGroup );
-		//Global.game.world.bringToTop( Global.Light.lightGroup );
-		//Global.game.world.bringToTop( Global.Gui.group );
+		Global.game.world.bringToTop( Global.Light.lightGroup );
+		Global.game.world.bringToTop( Global.Gui.group );
 	},
 
 	update: function()
@@ -49,12 +46,10 @@ Global.Game.prototype =
 			this.World.update();
 		}
 
-		/*
 		Global.Light.update();
 		Global.Gui.update();
 
-		this.handleMouseInput();
-		*/
+		//this.handleMouseInput();
 	},
 
 	togglePause: function()

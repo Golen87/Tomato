@@ -6,6 +6,7 @@ World.prototype.create = function ()
 	//Global.game.world.setBounds( -10, -10, 10, 10 );
 
 	this.helpGrid = Global.game.add.tileSprite( -TILE_SIZE, -TILE_SIZE, (ROOM_WIDTH+2) * TILE_SIZE, (ROOM_HEIGHT+2) * TILE_SIZE, 'tile' );
+	this.helpGrid.tint = 0;
 	this.helpGrid.alpha = 0.1;
 
 	this.entityGroup = Global.game.add.group();
@@ -13,7 +14,7 @@ World.prototype.create = function ()
 
 	this.Player = new Player();
 	this.Player.create(
-		TILE_SIZE*4, TILE_SIZE*4,
+		TILE_SIZE*ROOM_WIDTH/2, TILE_SIZE*ROOM_HEIGHT/2,
 		this.entityGroup
 	);
 

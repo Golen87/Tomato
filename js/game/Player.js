@@ -11,9 +11,14 @@ Player.prototype.create = function ( x, y, playerGroup )
 	this.gridPos = new Phaser.Point(0, 0);
 
 	this.allowInput = true;
+	this.inventory = new Inventory();
 
 	this.setupInput();
 	this.setupAnimation();
+
+	this.holdItem = playerGroup.create( 0, 0, 'items', 0 );
+	this.holdItem.alpha = 0;
+	this.holdItem.anchor.set( 0, 3/2 );
 };
 
 Player.prototype.setupAnimation = function ()
@@ -120,6 +125,10 @@ Player.prototype.update = function ()
 	{
 		if ( this.input.space.isDown ) {
 			this.setAnimation( 'hold' );
+			this.holdItem.alpha = 1;
+			this.holdItem.frame = this.inventory.getItem();
+		} else {
+			this.holdItem.alpha = 0;
 		}
 		if ( this.input.space.justUp ) {
 			this.useItem();
@@ -135,30 +144,44 @@ Player.prototype.update = function ()
 			inputDir.x += 1;
 	}
 
-	var direction = this.direction;
-	if ( inputDir.getMagnitude() > 0 ) {
-		if ( Math.abs( inputDir.x ) >= Math.abs( inputDir.y ) )
-			direction = inputDir.x > 0 ? 'right' : 'left';
-		else
-			direction = inputDir.y > 0 ? 'down' : 'up';
+	if ( !this.input.space.isDown ) {
 
-		this.setAnimation( 'idle', direction );
-	}
+		var direction = this.direction;
+		if ( inputDir.getMagnitude() > 0 ) {
+			if ( Math.abs( inputDir.x ) >= Math.abs( inputDir.y ) )
+				direction = inputDir.x > 0 ? 'right' : 'left';
+			else
+				direction = inputDir.y > 0 ? 'down' : 'up';
 
-	if ( this.allowInput && this.input[this.direction].holdTimer == 2 ) {
-		this.input[this.direction].holdTimer -= 12;
+			this.setAnimation( 'idle', direction );
+		}
 
-		if ( !Global.World.checkCollision( this.gridX + dx, this.gridY + dy ) ) {
-			this.sprite.goalX += dx * TILE_SIZE;
-			this.sprite.goalY += dy * TILE_SIZE;
+		if ( this.allowInput && this.input[this.direction].holdTimer == 2 ) {
+			this.input[this.direction].holdTimer -= 12;
+
+			if ( !Global.World.checkCollision( this.gridX + dx, this.gridY + dy ) ) {
+				this.sprite.goalX += dx * TILE_SIZE;
+				this.sprite.goalY += dy * TILE_SIZE;
 			
-			if ( Global.World.checkDirtAt( this.gridX + dx, this.gridY + dy ) ) {
-				Global.Audio.play( 'walking_dirt' );
-			} else {
-				Global.Audio.play( 'walking_grass' );
+				if ( Global.World.checkDirtAt( this.gridX + dx, this.gridY + dy ) ) {
+					Global.Audio.play( 'walking_dirt' );
+				} else {
+					Global.Audio.play( 'walking_grass' );
+				}
 			}
 		}
 	}
+
+	if ( this.input.space.holdTimer > 30 ) {
+		this.inventory.open();
+		if ( inputDir.getMagnitude() > 0 ) {
+			this.inventory.moveSelection( inputDir.x, inputDir.y );
+		}
+	} else {
+		this.inventory.close();
+	}
+
+	this.inventory.update();
 
 
 	var fac = 1 - Math.pow( 0.6, Global.game.time.elapsed * 0.06 );
@@ -166,6 +189,9 @@ Player.prototype.update = function ()
 	this.sprite.y += ( this.sprite.goalY - this.sprite.y ) * fac;
 
 	this.sprite.anchor.y = 0.5 + Math.sin( Global.game.time.totalElapsedSeconds() * 3 * Math.PI ) / 256;
+
+	this.holdItem.x = this.sprite.x;
+	this.holdItem.y = this.sprite.y+1;
 };
 
 Player.prototype.useItem = function ()
