@@ -23,6 +23,7 @@ Global.Preload.prototype = {
 		this.load.image( 'tile', 'assets/sprites/tile.png' );
 		this.load.image( 'tree', 'assets/sprites/tree.png' );
 		this.load.image( 'inventory', 'assets/sprites/inventory.png' );
+		this.load.image( 'select', 'assets/sprites/select.png' );
 		this.load.image( 'glow', 'assets/sprites/glow.png' );
 		this.load.image( 'torchlight', 'assets/sprites/torchlight.png' );
 

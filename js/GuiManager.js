@@ -28,7 +28,7 @@ GuiManager.prototype.create = function ()
 	this.invAnchor.addChild( this.invBg );
 	this.invAnchor.addChild( this.invFg );
 
-	this.invCursor = this.invAnchor.addChild( this.group.create( offsetX + 1*TILE_SIZE, offsetY + 1*TILE_SIZE, 'tile' ) );
+	this.invCursor = this.invAnchor.addChild( this.group.create( offsetX + 1*TILE_SIZE, offsetY + 1*TILE_SIZE, 'select' ) );
 
 	this.invSize = [4,3];
 	this.invSlots = Array( this.invSize );
