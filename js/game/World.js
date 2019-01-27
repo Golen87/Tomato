@@ -135,10 +135,42 @@ World.prototype.checkCollision = function ( x, y )
 	return this.entityManager.checkCollisionAt( x, y );
 };
 
-World.prototype.plantCrop = function ( x, y, cropData )
+
+World.prototype.waterCrop = function ( x, y )
+{
+	var crop = this.entityManager.getCrop( x, y );
+	if ( crop ) {
+		return crop.waterCrop();
+	}
+	return false;
+};
+
+World.prototype.cutCrop = function ( x, y )
+{
+	var crop = this.entityManager.getCrop( x, y );
+	if ( crop ) {
+		return crop.cutCrop();
+	}
+	return false;
+};
+
+World.prototype.digCrop = function ( x, y )
 {
 	if ( this.terrainManager.checkDirtAt( x, y )) {
-		this.entityManager.plantCrop( x, y, cropData );
-		this.entityManager.loadArea( this.camGoal.x, this.camGoal.y );
+		if ( this.entityManager.digCrop( x, y ) ) {
+			this.entityManager.loadArea( this.camGoal.x, this.camGoal.y );
+			return true;
+		}
 	}
+
+	return false;
+};
+
+World.prototype.plantCrop = function ( x, y, cropData )
+{
+	var crop = this.entityManager.getCrop( x, y );
+	if ( crop ) {
+		return crop.plantCrop( cropData );
+	}
+	return false;
 };

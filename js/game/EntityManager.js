@@ -1,7 +1,10 @@
 function EntityManager ( entityGroup )
 {
-	TileManager.call( this, 'tomato', entityGroup );
+	TileManager.call( this, '', entityGroup );
 	this.outsideRange = 5;
+
+	this.soilGroup = Global.game.add.group();
+	this.soilGroup.createMultiple( 3*ROOM_WIDTH*ROOM_HEIGHT, 'soil', 0, false );
 
 	this.cropInstances = [];
 }
@@ -63,8 +66,9 @@ EntityManager.prototype.createTile = function( x, y ) {
 	}
 
 	if ( this.getTile(x, y) instanceof Crop ) {
-		var s = this.addSprite( x, y, 0 );
-		this.getTile(x, y).init( s, x, y );
+		var crop = this.addSpriteToGroup( this.group, x, y, 0 );
+		var soil = this.addSpriteToGroup( this.soilGroup, x, y, 0 );
+		this.getTile(x, y).init( crop, soil, x, y );
 	}
 };
 
@@ -76,96 +80,57 @@ EntityManager.prototype.checkCollisionAt = function ( x, y )
 	return this.getTile(x,y) == TileTypes.Tree || this.getTile(x,y) == TileTypes.Bush;
 };
 
-EntityManager.prototype.attack = function ( x, y, callback )
+EntityManager.prototype.clearOutOfView = function ()
 {
-	Global.Audio.play( 'spikes' );
+	TileManager.prototype.clearOutOfView.call( this );
 
-	if (this.checkEnemyAt( x, y )) {
-		
-		for ( var i = 0; i < this.group.children.length; i++ )
-		{
-			var s = this.group.children[i];
-			if ( s.exists && s.pkey == [x,y] )
-			{
-
-				function blink( sprite, count=0 ) {
-					if ( count < 6 )
-					{
-						sprite.alpha = 1.5 - sprite.alpha;
-						sprite.tint = sprite.alpha == 1.0 ? 0xff7777 : 0xffffff;
-
-						Global.game.time.events.add( Phaser.Timer.SECOND * 0.05, function() {
-							blink.call( this, sprite, count+1 );
-						}, this );
-					}
-					else {
-						this.kill( x, y );
-						callback( true );
-					}
-				};
-				blink.call( this, s );
-
-			}
-		}
-	}
-	else {
-		var p = [x,y];
-		if ( this.tileMap[p] != TileTypes.Miss ) {
-			this.tileMap[p] = TileTypes.Miss;
-			var key = x + "," + y;
-			this.activeSet.delete(key);
-		}
-		callback( false );
-	}
-};
-
-EntityManager.prototype.kill = function ( x, y ) {
-	var p = [x,y];
-	if ( this.tileMap[p] ) {
-		this.tileMap[p] = TileTypes.Blood;
-	}
-
-	for ( var i = 0; i < this.group.children.length; i++ )
+	for ( var i = 0; i < this.soilGroup.children.length; i++ )
 	{
-		var s = this.group.children[i];
-		if ( s.exists && s.pkey == [x,y] )
+		var s = this.soilGroup.children[i];
+		if ( s.exists && !this.isInView( s.position.x, s.position.y ) )
 		{
+			if ( s.owner ) {
+				s.owner.soilSprite = null;
+				s.owner = null;
+			}
 			s.kill();
 			this.activeSet.delete(s.pkey);
-			Global.Audio.play( s.sound, 'hurt' );
 		}
 	}
 };
 
-EntityManager.prototype.reveal = function ( x, y )
+EntityManager.prototype.loadArea = function ( worldX, worldY )
 {
-	for ( var i = 0; i < this.group.children.length; i++ )
-	{
-		var s = this.group.children[i];
-		if ( s.exists && s.pkey == [x,y] )
-		{
-			s.visible = true;
-			Global.Audio.play( s.sound, 'cry' );
-		}
+	TileManager.prototype.loadArea.call( this, worldX, worldY );
+
+	this.soilGroup.sort( 'y', Phaser.Group.SORT_ASCENDING );
+};
+
+
+EntityManager.prototype.getCrop = function ( x, y )
+{
+	if ( this.getTile(x, y) instanceof Crop ) {
+		return this.getTile(x, y);
 	}
 };
 
-EntityManager.prototype.plantCrop = function ( x, y, cropData )
+EntityManager.prototype.digCrop = function ( x, y )
 {
 	var p = [x,y];
 	if ( this.tileMap[p] == TileTypes.None ) {
 
-		var crop = new Crop( cropData );
+		var crop = new Crop();
 		this.tileMap[p] = crop;
 		this.cropInstances.push( crop );
 
-		Global.Audio.play( 'planting_seed' );
-
 		var key = x + "," + y;
 		this.activeSet.delete(key);
+
+		Global.Audio.play( 'digging_dirt' );
+		return true;
 	}
-	//callback( false );
-}
+	return false;
+};
 
 
 EntityManager.prototype.update = function ()

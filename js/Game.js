@@ -34,6 +34,7 @@ Global.Game.prototype =
 
 		Global.game.world.bringToTop( Global.World.terrainManager.group );
 		Global.game.world.bringToTop( Global.World.helpGrid );
+		Global.game.world.bringToTop( Global.World.entityManager.soilGroup );
 		Global.game.world.bringToTop( Global.World.entityGroup );
 		Global.game.world.bringToTop( Global.Light.lightGroup );
 		Global.game.world.bringToTop( Global.Gui.group );

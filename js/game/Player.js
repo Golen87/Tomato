@@ -196,9 +196,26 @@ Player.prototype.update = function ()
 
 Player.prototype.useItem = function ()
 {
-	Global.World.plantCrop( this.gridX, this.gridY, CropTypes.Tomato );
-	this.setAnimation( 'use' );
+	var success = false;
 
+	if ( !this.inventory.show ) {
+		var item = this.inventory.getItem();
+
+		if ( item == Items.WateringCan ) {
+			success = Global.World.waterCrop( this.gridX, this.gridY );
+		}
+		if ( item == Items.Scythe ) {
+			success = Global.World.cutCrop( this.gridX, this.gridY );
+		}
+		if ( item == Items.Hoe ) {
+			success = Global.World.digCrop( this.gridX, this.gridY );
+		}
+		if ( item == Items.TomatoSeeds ) {
+			success = Global.World.plantCrop( this.gridX, this.gridY, CropTypes.Tomato );
+		}
+	}
+
+	this.setAnimation( 'use' );
 	Global.game.time.events.add( Phaser.Timer.SECOND * 1 / 6, function() {
 		this.setAnimation( 'idle', this.direction );
 	}, this );

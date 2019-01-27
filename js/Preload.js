@@ -42,7 +42,8 @@ Global.Preload.prototype = {
 		this.load.audio( 'planting_seed', 'assets/sounds/Planting_Seed.ogg' );
 		this.load.audio( 'grow_pop', 'assets/sounds/Grow_Pop.ogg' );
 		this.load.audio( 'harvest_tomato', 'assets/sounds/Harvest_Tomato.ogg' ); // !!!!!!!!!
-		this.load.audio( 'watering_crops', 'assets/sounds/Watering_Crops.ogg' ); // !!!!!!!!!
+		this.load.audio( 'watering_crops', 'assets/sounds/Watering_Crops.ogg' );
+		this.load.audio( 'scythe_swing', 'assets/sounds/Scythe_Swing.ogg' );
 
 
 		// Loading progress bar

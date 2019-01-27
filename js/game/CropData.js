@@ -6,6 +6,23 @@ const GrowthType = {
 	'WaterOrWither': 4,
 };
 
+const SoilType = {
+	'Dry': {
+		'frame': 0,
+		'next': null,
+	},
+	'Wet': {
+		'frame': 1,
+		'time': [120,180],
+		'next': 'Dry',
+	},
+	'Watered': {
+		'frame': 2,
+		'time': [60,120],
+		'next': 'Wet',
+	},
+};
+
 const CropTypes = {
 	'Tomato': {
 		'texture': 'tomato',
@@ -13,49 +30,50 @@ const CropTypes = {
 		'stages': {
 			'seeds': {
 				'frame': 0,
-				'time': [10,20],
+				'time': [30,50],
 				'type': GrowthType.NeedsWater,
 				'next': 'sprout_1',
 			},
 			'sprout_1': {
 				'frame': 1,
-				'time': [10,20],
+				'time': [30,50],
 				'type': GrowthType.WaterBoost,
 				'next': 'sprout_2',
 			},
 			'sprout_2': {
 				'frame': 2,
-				'time': [10,20],
+				'time': [30,50],
 				'type': GrowthType.WaterBoost,
 				'next': 'sprout_3',
 			},
 			'sprout_3': {
 				'frame': 3,
-				'time': [10,20],
+				'time': [30,50],
 				'type': GrowthType.WaterBoost,
 				'next': 'sprout_4',
 			},
 			'sprout_4': {
 				'frame': 4,
-				'time': [10,20],
+				'time': [30,50],
 				'type': GrowthType.WaterBoost,
 				'next': 'fruit',
 			},
 			'fruit': {
 				'frame': 5,
-				'time': [40,60],
+				'time': [300,1000],
 				'type': GrowthType.Normal,
-				'next': 'harvested',
+				//'next': 'harvested',
+				'next': 'withered_1',
 			},
 			'harvested': {
 				'frame': 6,
-				'time': [10,20],
+				'time': [200,600],
 				'type': GrowthType.WaterOrWither,
 				'next': 'withered_1',
 			},
 			'withered_1': {
 				'frame': 7,
-				'time': [10,20],
+				'time': [100,1000],
 				'type': GrowthType.WaterOrWither,
 				'next': 'withered_2',
 			},
@@ -69,7 +87,7 @@ const CropTypes = {
 		'texture': 'weed',
 		'stages': {
 			'weed_1': {
-				'time': [10,20],
+				'time': [100,1000],
 				'type': GrowthType.Normal,
 				'next': 'weed_2',
 			},
