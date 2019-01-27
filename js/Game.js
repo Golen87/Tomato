@@ -11,6 +11,9 @@ Global.Game.prototype =
 		Global.paused = false;
 		Global.game.physics.arcade.isPaused = false;
 
+		Global.Audio.play( 'ambience' );
+		Global.Audio.play( 'music' );
+
 		this.World = new World();
 		Global.World = this.World;
 		this.World.create();

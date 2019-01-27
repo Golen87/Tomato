@@ -35,4 +35,5 @@ Global.paused = false;
 
 /* Options */
 Global.music = 0.4;
+Global.ambience = 0.1;
 Global.sound = 0.8;

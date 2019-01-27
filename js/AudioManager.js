@@ -310,14 +310,21 @@ function AudioManager()
 	this.sounds[name].markers['cry'] = ['cry_1', 'cry_2', 'cry_3', 'cry_4'];
 	this.sounds[name].markers['hurt'] = ['hurt_1', 'hurt_2', 'hurt_3'];
 	this.sounds[name].markers['death'] = ['death_1', 'death_2'];
+	*/
 
-	var name = 'waves';
+	var name = 'music';
 	var vol = Global.music;
 	this.sounds[name] = {};
 	this.sounds[name].sound = Global.game.add.audio( name );
 	this.sounds[name].sound.volume = vol;
 	this.sounds[name].sound.loop = true;
-	*/
+
+	var name = 'ambience';
+	var vol = Global.ambience;
+	this.sounds[name] = {};
+	this.sounds[name].sound = Global.game.add.audio( name );
+	this.sounds[name].sound.volume = vol;
+	this.sounds[name].sound.loop = true;
 };
 
 AudioManager.prototype.getMarkers = function ( name, marker=null )
@@ -354,5 +361,6 @@ AudioManager.prototype.play = function ( name, marker=null )
 
 AudioManager.prototype.updateMusic = function ()
 {
-	this.sounds['waves'].sound.volume = Global.music;
+	this.sounds['music'].sound.volume = Global.music;
+	this.sounds['ambience'].sound.volume = Global.ambience;
 };

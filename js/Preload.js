@@ -29,6 +29,9 @@ Global.Preload.prototype = {
 		this.load.spritesheet( 'tomato', 'assets/sprites/tomato2.png', 128, 256 );
 		this.load.spritesheet( 'items', 'assets/sprites/tomato.png', 128, 128 );
 
+		this.load.audio( 'music', 'assets/sounds/Music.wav' );
+		this.load.audio( 'ambience', 'assets/sounds/Ambience.ogg' );
+
 		this.load.audio( 'walking_grass', 'assets/sounds/Walking_Grass.ogg' );
 		this.load.audio( 'walking_dirt', 'assets/sounds/Walking_Dirt.ogg' );
 		this.load.audio( 'menu_inventory', 'assets/sounds/Menu_Inventory.ogg' );

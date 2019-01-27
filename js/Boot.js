@@ -30,6 +30,10 @@ Global.Boot.prototype = {
 		if ( music != null )
 			Global.music = clamp( music, 0, 1 );
 
+		var ambience = readCookie( 'ambience' );
+		if ( ambience != null )
+			Global.ambience = clamp( ambience, 0, 1 );
+
 		var sound = readCookie( 'sound' );
 		if ( sound != null )
 			Global.sound = clamp( sound, 0, 1 );
