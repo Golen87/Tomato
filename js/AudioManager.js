@@ -113,7 +113,8 @@ function AudioManager()
 	var vol = 0.4;
 	this.sounds[name] = {};
 	this.sounds[name].sound = Global.game.add.audio( name );
-	this.sounds[name].sound.volume = vol;
+	this.sounds[name].sound.addMarker( '1', 0.000, 0.400, vol );
+	this.sounds[name].markers = ['1'];
 
 
 	var name = 'music';
@@ -168,7 +169,6 @@ AudioManager.prototype.play = function ( name, marker=null )
 	}
 
 	this.sounds[name].sound.play( index, 0, Global.sound * vol );
-	this.sounds[name].sound.volume = vol;
 };
 
 AudioManager.prototype.updateMusic = function ()
