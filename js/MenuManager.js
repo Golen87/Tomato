@@ -4,7 +4,6 @@ function MenuManager ()
 {
 	this.allowInput = true;
 	this.startPosition = new Phaser.Point( 0, 0 );
-	this.corners = null;
 
 	this.history = [];
 
@@ -13,7 +12,7 @@ function MenuManager ()
 	this.animationDelay = 0;
 	this.easing = Phaser.Easing.Quartic.Out;
 
-	this.separation = 12;
+	this.separation = TILE_SIZE;
 
 	this.setupInput();
 }
@@ -46,14 +45,6 @@ MenuManager.prototype.setupInput = function ()
 
 MenuManager.prototype.update = function ()
 {
-	if ( this.corners )
-	{
-		for ( var i=0; i<4; i++ )
-		{
-			var corner = this.corners[i];
-			corner.anchor.x = 0.5 + 0.25 * Math.sin( 1.6 * Global.game.time.totalElapsedSeconds() * Math.PI );
-		}
-	}
 };
 
 MenuManager.prototype.createMenu = function ( x, y, choiceList )
@@ -72,26 +63,15 @@ MenuManager.prototype.createMenu = function ( x, y, choiceList )
 		y += this.separation;
 	}
 
-
-	this.corners = [];
-	this.corners.push( Global.game.add.sprite( 0, 0, 'corner' ) );
-	this.corners[0].scale.set( 1, 1 );
-	this.corners.push( Global.game.add.sprite( 0, 0, 'corner' ) );
-	this.corners[1].scale.set( 1, -1 );
-	this.corners.push( Global.game.add.sprite( 0, 0, 'corner' ) );
-	this.corners[2].scale.set( -1, 1 );
-	this.corners.push( Global.game.add.sprite( 0, 0, 'corner' ) );
-	this.corners[3].scale.set( -1, -1 );
-
 	this.nextChoice( 0 );
 };
 
 MenuManager.prototype.createLabel = function ( x, y, choice )
 {
-	var label = Global.game.add.bitmapText( x, y, 'TinyUnicode', choice[0], 16 );
-	label.anchor.x = Math.round(label.textWidth * 0.5) / label.textWidth;
+	var label = Global.game.add.bitmapText( x, y, 'Simplisicky', choice[0], 128*0.75 );
+	label.anchor.x = Math.round(label.textWidth * 0) / label.textWidth;
 	label.anchor.y = Math.round(label.textHeight * 0.6) / label.textHeight;
-	label.tint = 0x333333;
+	label.tint = 0x777799;
 	label.function = choice[1];
 	return label;
 };
@@ -122,13 +102,6 @@ MenuManager.prototype.nextMenu = function ( choiceList )
 		Global.game.add.tween( label ).to({ x: this.startPosition.x, alpha: 1 }, this.animationTime, this.easing, true, this.animationDelay*i );
 	}
 
-	for ( var i=0; i<4; i++ )
-	{
-		this.corners[i].x = this.corners[i].startX + this.animationDist;
-		this.corners[i].alpha = 0;
-		Global.game.add.tween( this.corners[i] ).to({ x: this.corners[i].startX, alpha: 1 }, this.animationTime, this.easing, true, this.animationDelay*this.selection );
-	}
-
 	this.nextChoice( 0 );
 };
 
@@ -153,13 +126,6 @@ MenuManager.prototype.previousMenu = function ()
 		Global.game.add.tween( this.labels[i] ).to({ x: this.startPosition.x, alpha: 1 }, this.animationTime, this.easing, true, this.animationDelay*i );
 	}
 
-	for ( var i=0; i<4; i++ )
-	{
-		this.corners[i].x = this.corners[i].startX - this.animationDist;
-		this.corners[i].alpha = 0;
-		Global.game.add.tween( this.corners[i] ).to({ x: this.corners[i].startX, alpha: 1 }, this.animationTime, this.easing, true, this.animationDelay*this.selection );
-	}
-
 	this.nextChoice( 0 );
 };
 
@@ -169,12 +135,6 @@ MenuManager.prototype.killMenu = function ()
 	{
 		this.labels[i].kill();
 	}
-
-	for ( var i=0; i<4; i++ )
-	{
-		this.corners[i].kill();
-	}
-	this.corners = null;
 
 	for ( var i=0; i<this.history.length; i++ )
 	{
@@ -194,31 +154,15 @@ MenuManager.prototype.nextChoice = function ( inc )
 {
 	if ( this.allowInput )
 	{
-		this.labels[this.selection].tint = 0x333333;
+		this.labels[this.selection].tint = 0x777799;
 
 		this.selection += inc + this.labels.length; // Avoid negative modulo
 		this.selection %= this.labels.length;
 
 		this.labels[this.selection].tint = 0xffffff;
 
-		for ( var i=0; i<4; i++ )
-		{
-			var corner = this.corners[i];
-			corner.anchor.set( 0.5 );
-
-			var y = this.labels[this.selection].y - corner.scale.y * 4;
-			if ( corner.x == 0 && corner.y == 0 )
-			{
-				corner.x = this.startPosition.x - corner.scale.x * 30;
-				corner.startX = corner.x;
-				corner.y = y;
-			}
-			else
-				Global.game.add.tween( corner ).to({ y: y }, 200, Phaser.Easing.Exponential.Out, true );
-		}
-
 		if ( inc != 0 && this.labels.length > 1 )
-			Global.Audio.play( 'menu', 'select' );
+			Global.Audio.play( 'menu_inventory', 'move_cursor' );
 	}
 };
 
@@ -236,6 +180,6 @@ MenuManager.prototype.pickChoice = function ( inc=null )
 			this.labels[this.selection].text = newText;
 		}
 
-		Global.Audio.play( 'menu', 'click' );
+		Global.Audio.play( 'menu_inventory', 'close' );
 	}
 };

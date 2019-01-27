@@ -109,19 +109,25 @@ function AudioManager()
 	this.sounds[name].sound.addMarker( '6', 2.300, 0.42, vol );
 	this.sounds[name].markers = ['1', '2', '3', '4', '5', '6'];
 
+	var name = 'error';
+	var vol = 0.4;
+	this.sounds[name] = {};
+	this.sounds[name].sound = Global.game.add.audio( name );
+	this.sounds[name].sound.volume = vol;
+
 
 	var name = 'music';
 	var vol = Global.music;
 	this.sounds[name] = {};
 	this.sounds[name].sound = Global.game.add.audio( name );
-	this.sounds[name].sound.volume = vol;
+	this.sounds[name].sound.volume = vol*0.8;
 	this.sounds[name].sound.loop = true;
 
 	var name = 'ambience';
 	var vol = Global.ambience;
 	this.sounds[name] = {};
 	this.sounds[name].sound = Global.game.add.audio( name );
-	this.sounds[name].sound.volume = vol;
+	this.sounds[name].sound.volume = vol*0.1;
 	this.sounds[name].sound.loop = true;
 };
 
@@ -162,10 +168,11 @@ AudioManager.prototype.play = function ( name, marker=null )
 	}
 
 	this.sounds[name].sound.play( index, 0, Global.sound * vol );
+	this.sounds[name].sound.volume = vol;
 };
 
 AudioManager.prototype.updateMusic = function ()
 {
-	this.sounds['music'].sound.volume = Global.music;
-	this.sounds['ambience'].sound.volume = Global.ambience;
+	this.sounds['music'].sound.volume = Global.music*0.8;
+	this.sounds['ambience'].sound.volume = Global.ambience*0.1;
 };

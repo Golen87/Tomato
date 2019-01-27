@@ -10,7 +10,7 @@ var config = {
 	width: SCREEN_WIDTH,
 	height: SCREEN_HEIGHT,
 	renderer: Phaser.CANVAS,
-	parent: "TITLE HERE",
+	parent: "Shiba Farm",
 	state: null,
 	transparent: false,
 	antialias: true,
@@ -35,5 +35,5 @@ Global.paused = false;
 
 /* Options */
 Global.music = 0.4;
-Global.ambience = 0.1;
+Global.ambience = 0.4;
 Global.sound = 0.8;

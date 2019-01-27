@@ -10,14 +10,15 @@ Global.Preload.prototype = {
 		
 		//this.load.bitmapFont( 'Adventurer', 'assets/fonts/Adventurer/font.png', 'assets/fonts/Adventurer/font.fnt' ); // 16
 		//this.load.bitmapFont( 'AdventurerFancy', 'assets/fonts/Adventurer/font_fancy.png', 'assets/fonts/Adventurer/font_fancy.fnt' ); // 16
-		this.load.bitmapFont( 'Pixelade', 'assets/fonts/Pixelade/font.png', 'assets/fonts/Pixelade/font.fnt' ); // 13
+		//this.load.bitmapFont( 'Pixelade', 'assets/fonts/Pixelade/font.png', 'assets/fonts/Pixelade/font.fnt' ); // 13
 		//this.load.bitmapFont( 'PixeladeFancy', 'assets/fonts/Pixelade/font_fancy.png', 'assets/fonts/Pixelade/font_fancy.fnt' ); // 13
 		//this.load.bitmapFont( 'Fraktur', 'assets/fonts/Fraktur/font.png', 'assets/fonts/Fraktur/font.fnt' ); // 16
-		this.load.bitmapFont( 'TinyUnicode', 'assets/fonts/TinyUnicode/font.png', 'assets/fonts/TinyUnicode/font.fnt' ); // 16
+		//this.load.bitmapFont( 'TinyUnicode', 'assets/fonts/TinyUnicode/font.png', 'assets/fonts/TinyUnicode/font.fnt' ); // 16
 		//this.load.bitmapFont( 'OldWizard', 'assets/fonts/OldWizard/font.png', 'assets/fonts/OldWizard/font.fnt' ); // 16
 		//this.load.bitmapFont( 'Peepo', 'assets/fonts/Peepo/font.png', 'assets/fonts/Peepo/font.fnt' ); // 9
 		//this.load.bitmapFont( 'Superscript', 'assets/fonts/Superscript/font.png', 'assets/fonts/Superscript/font.fnt' ); // 10
-		this.load.bitmapFont( '04b24', 'assets/fonts/04b24/font.png', 'assets/fonts/04b24/font.fnt' ); // 8
+		//this.load.bitmapFont( '04b24', 'assets/fonts/04b24/font.png', 'assets/fonts/04b24/font.fnt' ); // 8
+		this.load.bitmapFont( 'Simplisicky', 'assets/fonts/Simplisicky/font.png', 'assets/fonts/Simplisicky/font.fnt' ); // 128
 
 		this.load.image( 'tile', 'assets/sprites/tile.png' );
 		this.load.image( 'tree', 'assets/sprites/tree.png' );
@@ -44,6 +45,7 @@ Global.Preload.prototype = {
 		this.load.audio( 'harvest_tomato', 'assets/sounds/Harvest_Tomato.ogg' ); // !!!!!!!!!
 		this.load.audio( 'watering_crops', 'assets/sounds/Watering_Crops.ogg' );
 		this.load.audio( 'scythe_swing', 'assets/sounds/Scythe_Swing.ogg' );
+		this.load.audio( 'error', 'assets/sounds/Error.ogg' );
 
 
 		// Loading progress bar

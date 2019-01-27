@@ -196,6 +196,11 @@ Player.prototype.update = function ()
 
 Player.prototype.useItem = function ()
 {
+	if ( this.inventory.show ) {
+		this.setAnimation( 'idle', this.direction );
+		return;
+	}
+
 	var success = false;
 
 	if ( !this.inventory.show ) {
@@ -214,6 +219,9 @@ Player.prototype.useItem = function ()
 			success = Global.World.plantCrop( this.gridX, this.gridY, CropTypes.Tomato );
 		}
 	}
+
+	if ( !success )
+		Global.Audio.play( 'error' );
 
 	this.setAnimation( 'use' );
 	Global.game.time.events.add( Phaser.Timer.SECOND * 1 / 6, function() {
