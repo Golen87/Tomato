@@ -30,12 +30,12 @@ function AudioManager()
 	var vol = 0.8;
 	this.sounds[name] = {};
 	this.sounds[name].sound = Global.game.add.audio( name );
-	this.sounds[name].sound.addMarker( 'open',			0.000, 0.42, 0.8*vol );
-	this.sounds[name].sound.addMarker( 'move_cursor',	0.460, 0.42, vol );
+	this.sounds[name].sound.addMarker( 'open',			0.000, 0.42, 0.9 * vol );
+	this.sounds[name].sound.addMarker( 'move_cursor',	0.460, 0.42, 0.7 * vol );
 	this.sounds[name].sound.addMarker( 'seeds',			0.920, 0.42, vol );
 	this.sounds[name].sound.addMarker( 'scythe_hoe',	1.380, 0.42, vol );
 	this.sounds[name].sound.addMarker( 'watercan',		1.840, 0.42, vol );
-	this.sounds[name].sound.addMarker( 'close',			2.300, 0.42, 0.8*vol );	
+	this.sounds[name].sound.addMarker( 'close',			2.300, 0.42, vol );	
 	this.sounds[name].sound.allowMultiple = true;
 
 	var name = 'digging_dirt';
