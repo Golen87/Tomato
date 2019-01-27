@@ -57,7 +57,7 @@ const CropTypes = {
 				'frame': 7,
 				'time': [10,20],
 				'type': GrowthType.WaterOrWither,
-				'next': 'withered_1',
+				'next': 'withered_2',
 			},
 			'withered_2': {
 				'frame': 8,

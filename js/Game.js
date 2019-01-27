@@ -21,10 +21,10 @@ Global.Game.prototype =
 		Global.World = this.World;
 		this.World.create();
 
-		var key = Global.game.input.keyboard.addKey( Phaser.Keyboard.ESC );
-		key.onDown.add( this.togglePause, this );
-		var key = Global.game.input.keyboard.addKey( Phaser.Keyboard.P );
-		key.onDown.add( this.togglePause, this );
+		//var key = Global.game.input.keyboard.addKey( Phaser.Keyboard.ESC );
+		//key.onDown.add( this.togglePause, this );
+		//var key = Global.game.input.keyboard.addKey( Phaser.Keyboard.P );
+		//key.onDown.add( this.togglePause, this );
 
 		this.mousePosition = new Phaser.Point( 0, 0 );
 		this.holdPosition = new Phaser.Point( 0, 0 );
