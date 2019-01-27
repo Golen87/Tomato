@@ -34,7 +34,20 @@ Inventory.prototype.close = function ()
 {
 	if ( this.show ) {
 		this.show = false;
-		Global.Audio.play( 'menu_inventory', 'close' );
+
+		var item = this.getItem();
+		if ( item == Items.WateringCan ) {
+			Global.Audio.play( 'menu_inventory', 'watercan' );
+		}
+		else if ( item == Items.Scythe || item == Items.Hoe ) {
+			Global.Audio.play( 'menu_inventory', 'scythe_hoe' );
+		}
+		else if ( item == Items.TomatoSeeds || item == Items.Tomato ) {
+			Global.Audio.play( 'menu_inventory', 'seeds' );
+		}
+		else {
+			Global.Audio.play( 'menu_inventory', 'close' );
+		}
 	}
 };
 
@@ -59,19 +72,7 @@ Inventory.prototype.moveSelection = function ( dx, dy )
 	Global.Gui.invCursor.x = offsetX + (x+1) * TILE_SIZE;
 	Global.Gui.invCursor.y = offsetY + (y+1) * TILE_SIZE;
 
- 	var item = this.getItem();
-	if ( item == Items.WateringCan ) {
-		Global.Audio.play( 'menu_inventory', 'watercan' );
-	}
-	else if ( item == Items.Scythe || item == Items.Hoe ) {
-		Global.Audio.play( 'menu_inventory', 'scythe_hoe' );
-	}
-	else if ( item == Items.TomatoSeeds || item == Items.Tomato ) {
-		Global.Audio.play( 'menu_inventory', 'seeds' );
-	}
-	else {
-		Global.Audio.play( 'menu_inventory', 'move_cursor' );
-	}
+	Global.Audio.play( 'menu_inventory', 'move_cursor' );
 };
 
 Inventory.prototype.updateItems = function ()
