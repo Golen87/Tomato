@@ -46,6 +46,8 @@ TerrainManager.prototype.createTile = function( x, y ) {
 		index += 4 * this.isTile( x-1, y, TileTypes.Dirt ); // Left
 		index += 8 * this.isTile( x, y-1, TileTypes.Dirt ); // Up
 
+		index = randInt(0,2);
+
 		this.addSprite( x, y, Tiles.Dirt.pos[index] );
 	}
 

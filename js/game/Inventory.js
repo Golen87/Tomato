@@ -86,3 +86,9 @@ Inventory.prototype.getItem = function ()
 {
 	return this.invSlots[this.selected];
 };
+
+
+Inventory.prototype.addItems = function ( items )
+{
+	console.log( "Got", items );
+};

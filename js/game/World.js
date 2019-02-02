@@ -63,7 +63,7 @@ World.prototype.update = function ()
 	if ( this.Player.sprite.goalY + TILE_SIZE/2 > this.camGoal.y + SCREEN_HEIGHT - TILE_SIZE ) {
 		this.camGoal.y += TILE_SIZE * (ROOM_HEIGHT/2);
 	}
-	if ( this.Player.sprite.goalY + TILE_SIZE/2 < this.camGoal.y + TILE_SIZE ) {
+	if ( this.Player.sprite.goalY + TILE_SIZE/2 < this.camGoal.y + 2*TILE_SIZE ) {
 		this.camGoal.y -= TILE_SIZE * (ROOM_HEIGHT/2);
 	}
 
@@ -135,6 +135,11 @@ World.prototype.checkCollision = function ( x, y )
 	return this.entityManager.checkCollisionAt( x, y );
 };
 
+World.prototype.getCropAt = function ( x, y )
+{
+	return this.entityManager.getCrop( x, y );
+};
+
 
 World.prototype.waterCrop = function ( x, y )
 {
@@ -156,13 +161,17 @@ World.prototype.cutCrop = function ( x, y )
 
 World.prototype.digCrop = function ( x, y )
 {
+	var crop = this.entityManager.getCrop( x, y );
+	if ( crop ) {
+		return crop.digCrop();
+	}
+
 	if ( this.terrainManager.checkDirtAt( x, y )) {
 		if ( this.entityManager.digCrop( x, y ) ) {
 			this.entityManager.loadArea( this.camGoal.x, this.camGoal.y );
 			return true;
 		}
 	}
-
 	return false;
 };
 

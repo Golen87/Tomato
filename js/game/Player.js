@@ -124,11 +124,9 @@ Player.prototype.update = function ()
 	if ( this.allowInput )
 	{
 		if ( this.input.space.isDown ) {
-			this.setAnimation( 'hold' );
-			this.holdItem.alpha = 1;
-			this.holdItem.frame = this.inventory.getItem();
+			this.prepareItem();
 		} else {
-			this.holdItem.alpha = 0;
+			this.stopItem();
 		}
 		if ( this.input.space.justUp ) {
 			this.useItem();
@@ -194,6 +192,20 @@ Player.prototype.update = function ()
 	this.holdItem.y = this.sprite.y+1;
 };
 
+
+Player.prototype.prepareItem = function ()
+{
+	var crop = Global.World.getCropAt( this.gridX, this.gridY );
+	if ( crop && crop.canHarvest() ) {
+		this.setAnimation( 'use' );
+	}
+	else {
+		this.setAnimation( 'hold' );
+		this.holdItem.alpha = 1;
+		this.holdItem.frame = this.inventory.getItem();
+	}
+};
+
 Player.prototype.useItem = function ()
 {
 	if ( this.inventory.show ) {
@@ -204,6 +216,21 @@ Player.prototype.useItem = function ()
 	var success = false;
 
 	if ( !this.inventory.show ) {
+
+		var crop = Global.World.getCropAt( this.gridX, this.gridY );
+		if ( crop && crop.canHarvest() ) {
+
+			var harvest = crop.harvestCrop( this.gridX, this.gridY );
+			this.inventory.addItems( harvest );
+
+			this.setAnimation( 'hold' );
+			Global.game.time.events.add( Phaser.Timer.SECOND * 1 / 6, function() {
+				this.setAnimation( 'idle', this.direction );
+			}, this );
+
+			return;
+		}
+
 		var item = this.inventory.getItem();
 
 		if ( item == Items.WateringCan ) {
@@ -216,7 +243,7 @@ Player.prototype.useItem = function ()
 			success = Global.World.digCrop( this.gridX, this.gridY );
 		}
 		if ( item == Items.TomatoSeeds ) {
-			success = Global.World.plantCrop( this.gridX, this.gridY, CropTypes.Tomato );
+			success = Global.World.plantCrop( this.gridX, this.gridY, Crops.Tomato );
 		}
 	}
 
@@ -227,4 +254,9 @@ Player.prototype.useItem = function ()
 	Global.game.time.events.add( Phaser.Timer.SECOND * 1 / 6, function() {
 		this.setAnimation( 'idle', this.direction );
 	}, this );
+};
+
+Player.prototype.stopItem = function ()
+{
+	this.holdItem.alpha = 0;
 };

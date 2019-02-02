@@ -7,6 +7,9 @@ function EntityManager ( entityGroup )
 	this.soilGroup.createMultiple( 3*ROOM_WIDTH*ROOM_HEIGHT, 'soil', 0, false );
 
 	this.cropInstances = [];
+
+	this.updateTimer = getTime();
+	this.updateFrequency = 0.11;
 }
 
 
@@ -82,7 +85,19 @@ EntityManager.prototype.checkCollisionAt = function ( x, y )
 
 EntityManager.prototype.clearOutOfView = function ()
 {
-	TileManager.prototype.clearOutOfView.call( this );
+	for ( var i = 0; i < this.group.children.length; i++ )
+	{
+		var s = this.group.children[i];
+		if ( s.exists && !this.isInView( s.position.x, s.position.y ) )
+		{
+			if ( s.owner ) {
+				s.owner.cropSprite = null;
+				s.owner = null;
+			}
+			s.kill();
+			this.activeSet.delete(s.pkey);
+		}
+	}
 
 	for ( var i = 0; i < this.soilGroup.children.length; i++ )
 	{
@@ -135,8 +150,13 @@ EntityManager.prototype.digCrop = function ( x, y )
 
 EntityManager.prototype.update = function ()
 {
-	for (var i = this.cropInstances.length - 1; i >= 0; i--) {
-		this.cropInstances[i].update();
+	var time = getTime();
+	if ( time > this.updateTimer ) {
+		this.updateTimer = time + this.updateFrequency;
+		
+		for (var i = this.cropInstances.length - 1; i >= 0; i--) {
+			this.cropInstances[i].update();
+		}
 	}
 };
 

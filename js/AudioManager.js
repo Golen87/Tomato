@@ -74,16 +74,12 @@ function AudioManager()
 	this.sounds[name].markers = ['1', '2', '3', '4', '5', '6'];
 
 	var name = 'harvest_tomato';
-	var vol = 0.4;
+	var vol = 0.6;
 	this.sounds[name] = {};
 	this.sounds[name].sound = Global.game.add.audio( name );
-	this.sounds[name].sound.addMarker( '1', 0.000, 0.42, vol );
-	this.sounds[name].sound.addMarker( '2', 0.460, 0.42, vol );
-	this.sounds[name].sound.addMarker( '3', 0.920, 0.42, vol );
-	this.sounds[name].sound.addMarker( '4', 1.380, 0.42, vol );
-	this.sounds[name].sound.addMarker( '5', 1.840, 0.42, vol );
-	this.sounds[name].sound.addMarker( '6', 2.300, 0.42, vol );
-	this.sounds[name].markers = ['1', '2', '3', '4', '5', '6'];
+	this.sounds[name].sound.addMarker( '1', 0.000, 0.400, vol );
+	this.sounds[name].markers = ['1'];
+	this.sounds[name].sound.allowMultiple = true;
 
 	var name = 'watering_crops';
 	var vol = 0.4;
@@ -110,11 +106,12 @@ function AudioManager()
 	this.sounds[name].markers = ['1', '2', '3', '4', '5', '6'];
 
 	var name = 'error';
-	var vol = 0.4;
+	var vol = 0.7;
 	this.sounds[name] = {};
 	this.sounds[name].sound = Global.game.add.audio( name );
 	this.sounds[name].sound.addMarker( '1', 0.000, 0.400, vol );
 	this.sounds[name].markers = ['1'];
+	this.sounds[name].sound.allowMultiple = true;
 
 
 	var name = 'music';

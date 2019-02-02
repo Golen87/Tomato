@@ -176,6 +176,10 @@ function readCookie(name) {
 	return null;
 }
 
+function getTime() {
+	return Global.game.time.totalElapsedSeconds();
+}
+
 
 const bitmapBlendModes = {
 	0: 'source-over',
