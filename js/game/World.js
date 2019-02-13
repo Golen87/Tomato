@@ -54,16 +54,17 @@ World.prototype.update = function ()
 
 	/* Camera */
 
-	if ( this.Player.sprite.goalX + TILE_SIZE/2 > this.camGoal.x + SCREEN_WIDTH - TILE_SIZE ) {
+	if ( this.Player.goal.x + TILE_SIZE/2 > this.camGoal.x + SCREEN_WIDTH - TILE_SIZE ) {
+		//console.log(this.Player.goal.x);
 		this.camGoal.x += TILE_SIZE * (ROOM_WIDTH/2);
 	}
-	if ( this.Player.sprite.goalX + TILE_SIZE/2 < this.camGoal.x + TILE_SIZE ) {
+	if ( this.Player.goal.x + TILE_SIZE/2 < this.camGoal.x + TILE_SIZE ) {
 		this.camGoal.x -= TILE_SIZE * (ROOM_WIDTH/2);
 	}
-	if ( this.Player.sprite.goalY + TILE_SIZE/2 > this.camGoal.y + SCREEN_HEIGHT - TILE_SIZE ) {
+	if ( this.Player.goal.y + TILE_SIZE/2 > this.camGoal.y + SCREEN_HEIGHT - TILE_SIZE ) {
 		this.camGoal.y += TILE_SIZE * (ROOM_HEIGHT/2);
 	}
-	if ( this.Player.sprite.goalY + TILE_SIZE/2 < this.camGoal.y + 2*TILE_SIZE ) {
+	if ( this.Player.goal.y + TILE_SIZE/2 < this.camGoal.y + 2*TILE_SIZE ) {
 		this.camGoal.y -= TILE_SIZE * (ROOM_HEIGHT/2);
 	}
 

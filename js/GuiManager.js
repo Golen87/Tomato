@@ -32,11 +32,14 @@ GuiManager.prototype.create = function ()
 
 	this.invSize = [4,3];
 	this.invSlots = Array( this.invSize );
+
 	for ( var i = 0; i < this.invSize[0] * this.invSize[1]; i++ ) {	
-		//this.invSlots[i] = this.group.create( 0, 0, 'items' );
 		var x = 1 + i % this.invSize[0];
 		var y = 1 + Math.floor( i / this.invSize[0] );
 		this.invSlots[i] = this.invFg.addChild( this.group.create( x*TILE_SIZE, y*TILE_SIZE, 'items' ) );
+
+		this.invSlots[i].label = this.invFg.addChild( Global.game.add.bitmapText( x*TILE_SIZE+12, (y+1)*TILE_SIZE+10, 'Simplisicky', '', 128*0.4, this.group ) );
+		this.invSlots[i].label.anchor.setTo( 0.0, 1.0 );
 	}
 };
 

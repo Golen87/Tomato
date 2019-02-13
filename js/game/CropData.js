@@ -50,7 +50,8 @@ const Crops = {
 				'frame': 5,
 				'harvest': {
 					'next': 'harvested',
-					'items': [Items.Tomato, Items.Tomato, Items.Tomato],
+					'item': Items.Tomato,
+					'quantity': 3,
 				},
 				'wither': 'withered_1',
 			},
@@ -76,6 +77,8 @@ const Crops = {
 };
 
 const Soils = {
+	'texture': 'soil',
+
 	'Watered': {
 		'type': CropType.Soil,
 		'frame': 0,

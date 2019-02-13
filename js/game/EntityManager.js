@@ -3,8 +3,8 @@ function EntityManager ( entityGroup )
 	TileManager.call( this, '', entityGroup );
 	this.outsideRange = 5;
 
-	this.soilGroup = Global.game.add.group();
-	this.soilGroup.createMultiple( 3*ROOM_WIDTH*ROOM_HEIGHT, 'soil', 0, false );
+	//this.soilGroup = Global.game.add.group();
+	this.group.createMultiple( 3*ROOM_WIDTH*ROOM_HEIGHT, '', 0, false );
 
 	this.cropInstances = [];
 
@@ -46,7 +46,9 @@ EntityManager.prototype.generateTile = function ( x, y )
 EntityManager.prototype.addTree = function( x, y ) {
 	var s = this.addSprite( x, y, 0 );
 	s.loadTexture( 'tree' );
-	s.anchor.set( 1/3, 3/4 );
+	//s.anchor.set( 1/3, 3/4 );
+	s.y += TILE_SIZE/8;
+	s.anchor.set( 1/3, 3/4 + 1/16 );
 
 	//var frames = pos.toIndex( this.tileset );
 	//s.animations.add( 'idle', frames, 2.5, true );
@@ -70,7 +72,8 @@ EntityManager.prototype.createTile = function( x, y ) {
 
 	if ( this.getTile(x, y) instanceof Crop ) {
 		var crop = this.addSpriteToGroup( this.group, x, y, 0 );
-		var soil = this.addSpriteToGroup( this.soilGroup, x, y, 0 );
+		var soil = this.addSpriteToGroup( this.group, x, y, 0 );
+		console.log();
 		this.getTile(x, y).init( crop, soil, x, y );
 	}
 };
@@ -82,7 +85,7 @@ EntityManager.prototype.checkCollisionAt = function ( x, y )
 {
 	return this.getTile(x,y) == TileTypes.Tree || this.getTile(x,y) == TileTypes.Bush;
 };
-
+/*
 EntityManager.prototype.clearOutOfView = function ()
 {
 	for ( var i = 0; i < this.group.children.length; i++ )
@@ -113,13 +116,13 @@ EntityManager.prototype.clearOutOfView = function ()
 		}
 	}
 };
-
 EntityManager.prototype.loadArea = function ( worldX, worldY )
 {
 	TileManager.prototype.loadArea.call( this, worldX, worldY );
 
 	this.soilGroup.sort( 'y', Phaser.Group.SORT_ASCENDING );
 };
+*/
 
 
 EntityManager.prototype.getCrop = function ( x, y )

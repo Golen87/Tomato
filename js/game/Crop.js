@@ -18,8 +18,8 @@ Crop.prototype.init = function ( cropSprite, soilSprite, x, y )
 	this.cropSprite.owner = this;
 
 	this.cropSprite.loadTexture( Crops.Tomato.texture );
-	this.cropSprite.y -= TILE_SIZE/8;
-	this.cropSprite.anchor.set( 0, 1/2 - 1/16 );
+	this.cropSprite.y += TILE_SIZE/8;
+	this.cropSprite.anchor.set( 0, 1/2 + 1/16 );
 	this.cropSprite.alpha = 1.0;
 	this.cropSprite.scale.set( 1 );
 	this.cropSprite.visible = false;
@@ -28,13 +28,10 @@ Crop.prototype.init = function ( cropSprite, soilSprite, x, y )
 	this.soilSprite = soilSprite;
 	this.soilSprite.owner = this;
 
-	//this.soilSprite.loadTexture( this.crop.texture );
-	this.soilSprite.y -= TILE_SIZE/8;
-	this.soilSprite.anchor.set( 0, 1/2 -1/16 );
+	this.soilSprite.loadTexture( Soils.texture );
 	this.soilSprite.visible = true;
 	this.soilSprite.alpha = 1.0;
 	this.soilSprite.scale.set( 1 );
-
 
 	//if ( (x+y) % 2 == 0 )
 	//	this.sprite.scale.x = -1;
@@ -59,6 +56,13 @@ Crop.prototype.updateSprite = function ()
 		if ( this.soil ) {
 			this.soilSprite.visible = true;
 			this.soilSprite.frame = this.soil.frame;
+			if ( this.soil.type == CropType.Soil ) {
+				this.soilSprite.y = this.cropSprite.y - TILE_SIZE/16;
+				this.soilSprite.anchor.y = this.cropSprite.anchor.y - 1/32;
+			} else {
+				this.soilSprite.y = this.cropSprite.y + TILE_SIZE/16;
+				this.soilSprite.anchor.y = this.cropSprite.anchor.y + 1/32;
+			}
 		}
 		else {
 			this.soilSprite.visible = false;
@@ -147,11 +151,10 @@ Crop.prototype.starveCrop = function ( time, exists )
 {
 	var stage = this.getStage();
 
-	if ( stage && stage.type == CropType.Sprout ) {
+	if ( stage/* && stage.type == CropType.Sprout*/ ) {
 		if ( stage.wither ) {
 			this.cropStage = stage.wither;
 			this.resetCropTimer( time );
-			this.updateSprite();
 			if ( exists ) {
 				Global.Audio.play( 'grow_pop' );
 			}
@@ -159,6 +162,7 @@ Crop.prototype.starveCrop = function ( time, exists )
 		else {
 			this.setCropData( null );
 		}
+		this.updateSprite();
 	}
 };
 
@@ -242,7 +246,7 @@ Crop.prototype.cutCrop = function ()
 	}
 
 	var stage = this.getStage();
-	if ( stage && ( stage == CropType.Sprout || stage == CropType.Weed ) ) {
+	if ( stage && ( stage.type == CropType.Sprout || stage.type == CropType.Weed ) ) {
 		this.setCropData( null );
 		this.updateSprite();
 		success = true;
@@ -287,7 +291,7 @@ Crop.prototype.canHarvest = function ()
 	return stage && stage.type == CropType.Fruit && stage.harvest;
 };
 
-Crop.prototype.harvestCrop = function ()
+Crop.prototype.harvestCrop = function ( container )
 {
 	var stage = this.getStage();
 
@@ -297,7 +301,6 @@ Crop.prototype.harvestCrop = function ()
 		this.updateSprite();
 		Global.Audio.play( 'harvest_tomato' );
 
-		return stage.harvest.items;
+		return [stage.harvest.item, stage.harvest.quantity];
 	}
-	return null;
 };

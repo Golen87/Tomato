@@ -7,25 +7,43 @@ const Items = {
 	'Tomato': 5,
 };
 
+function Slot( item, quantity )
+{
+	this.item = item;
+	this.quantity = quantity;
+};
+
 
 function Inventory()
 {
 	this.selected = 0;
+	this.prevSelected = 0;
 	this.show = false;
 
 	this.invSize = [4,3];
-	this.invSlots = [
-		Items.Hoe, Items.Scythe, Items.None, Items.None,
-		Items.WateringCan, Items.TomatoSeeds, Items.None, Items.None,
-		Items.None, Items.None, Items.None, Items.None,
-	];
+	this.invSlots = [];
+	for ( var i = 0; i < this.invSize[0] * this.invSize[1]; i++ ) {
+		this.invSlots.push( new Slot( Items.None, 0 ) );
+	}
+
+	this.addItem( Items.Hoe, 1, 0 );
+	this.addItem( Items.Scythe, 1, 1 );
+	this.addItem( Items.WateringCan, 1, 4 );
+	this.addItem( Items.TomatoSeeds, 5, 5 );
+
 	this.updateItems();
+};
+
+Inventory.prototype.update = function ()
+{
+	Global.Gui.invAnchor.alpha = ( Global.Gui.invAnchor.alpha + ( this.show ? 0.25 : -0.25 ) ).clamp( 0, 0.8 );
 };
 
 Inventory.prototype.open = function ()
 {
 	if ( !this.show ) {
 		this.show = true;
+		this.prevSelected = this.selected;
 		Global.Audio.play( 'menu_inventory', 'open' );
 	}
 };
@@ -35,7 +53,7 @@ Inventory.prototype.close = function ()
 	if ( this.show ) {
 		this.show = false;
 
-		var item = this.getItem();
+		var item = this.getSelectedItem();
 		if ( item == Items.WateringCan ) {
 			Global.Audio.play( 'menu_inventory', 'watercan' );
 		}
@@ -49,11 +67,6 @@ Inventory.prototype.close = function ()
 			Global.Audio.play( 'menu_inventory', 'close' );
 		}
 	}
-};
-
-Inventory.prototype.update = function ()
-{
-	Global.Gui.invAnchor.alpha = ( Global.Gui.invAnchor.alpha + ( this.show ? 0.25 : -0.25 ) ).clamp( 0, 0.8 );
 };
 
 
@@ -77,18 +90,65 @@ Inventory.prototype.moveSelection = function ( dx, dy )
 
 Inventory.prototype.updateItems = function ()
 {
-	for ( var i = 0; i < this.invSize[0] * this.invSize[1]; i++ ) {	
-		Global.Gui.invSlots[i].frame = this.invSlots[i];
+	for ( var i = 0; i < this.invSize[0] * this.invSize[1]; i++ ) {
+		Global.Gui.invSlots[i].frame = this.invSlots[i].item;
+		var count = this.invSlots[i].quantity;
+		Global.Gui.invSlots[i].label.setText( count > 1 ? count.toString() : '' );
 	}
 };
 
-Inventory.prototype.getItem = function ()
+Inventory.prototype.getSelectedItem = function ()
 {
-	return this.invSlots[this.selected];
+	return this.invSlots[this.selected].item;
+};
+
+Inventory.prototype.findSlotWithItem = function ( item=null )
+{
+	for ( var i = 0; i < this.invSize[0] * this.invSize[1]; i++ ) {
+		if ( this.invSlots[i].item == item ) {
+			return i;
+		}
+	}
+	return null;
 };
 
 
-Inventory.prototype.addItems = function ( items )
+Inventory.prototype.addItem = function ( item, quantity, slot=null )
 {
-	console.log( "Got", items );
+	if ( slot == null ) {
+		slot = this.findSlotWithItem( item );
+		if ( slot == null ) {
+			slot = this.findSlotWithItem( Items.None );
+		}
+	}
+
+	if ( slot == null ) {
+		return console.warn( "Inventory full" );
+	}
+
+	if ( this.invSlots[slot].item == item ) {
+		this.invSlots[slot].quantity += quantity;
+		//console.log( "Increased item at", slot, item, quantity );
+	}
+	else if ( this.invSlots[slot].item == Items.None ) {
+		this.invSlots[slot].item = item;
+		this.invSlots[slot].quantity = quantity;
+		//console.log( "Set item at", slot, item, quantity );
+	}
+	else {
+		console.error( "addItem panic" );
+	}
+
+	this.updateItems();
+};
+
+Inventory.prototype.spend = function ()
+{
+	this.invSlots[this.selected].quantity -= 1;
+
+	if ( this.invSlots[this.selected].quantity <= 0 ) {
+		this.invSlots[this.selected].item = Items.None;
+	}
+
+	this.updateItems();
 };
