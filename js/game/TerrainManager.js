@@ -7,6 +7,26 @@ function TerrainManager ()
 
 /* Tile generation */
 
+TerrainManager.prototype.getNoise = function ( x, y )
+{
+	var distance = (x==0 && y==0) ? 0 : Math.sqrt( x*x + y*y );
+
+	var island_radius = 30;
+	var safe_radius = 8;
+
+	var gradient = 1.0 - Math.pow( distance / island_radius, 2 );
+	gradient = gradient.clamp( 0, 1 );
+	var raise = ( 1 - distance / safe_radius ) / 1;
+	raise = raise.clamp( 0, 1 );
+
+	var k = 8;
+	var value = 0.5 + noise.perlin2(x/k + this.seed[0], y/k + this.seed[1]) / 2;
+	value = (value + raise).clamp( 0, 1 );
+	value *= gradient;
+
+	return value;
+};
+
 TerrainManager.prototype.generateTile = function ( x, y )
 {
 	//if ( Math.abs(x) + Math.abs(y) < 1 ) {
@@ -17,11 +37,17 @@ TerrainManager.prototype.generateTile = function ( x, y )
 	//	return TileTypes.Dirt;
 	//}
 
-	var value = noise.simplex2(x/14 + this.seed[0], y/14 + this.seed[1]);
+	var value = this.getNoise( x, y );
 
-	if (value > 0.53 || value < -0.6) {
+	//if (value > 0.56 || value < -0.6) {
+	//if (value > 0.6 || value < -0.6) {
+	//	return TileTypes.Dirt;
+	//}
+
+	if ( value < 0.3 )
+		return TileTypes.Water;
+	if ( value < 0.4 )
 		return TileTypes.Dirt;
-	}
 
 	return TileTypes.Grass;
 };
@@ -48,20 +74,21 @@ TerrainManager.prototype.createTile = function( x, y ) {
 
 		index = randInt(0,2);
 
-		this.addSprite( x, y, Tiles.Dirt.pos[index] );
+		var s = this.addSprite( x, y, Tiles.Dirt.pos[index] );
+		//s.tint = 0x010101 * Math.floor(this.getNoise(x,y) * 255);
 	}
 
 	if ( this.isTile( x, y, TileTypes.Grass ) ) {
-		this.addSprite( x, y, Tiles.Grass.pos.choice() );
-	}
+		var s = this.addSprite( x, y, Tiles.Grass.pos.choice() );
+		//var s = this.addSprite( x, y, Tiles.Grass.pos[0] );
+		//s.tint = 0x010101 * Math.floor(this.getNoise(x,y) * 255);
+	};
+
+	if ( this.isTile( x, y, TileTypes.Water ) ) {
+		var s = this.addSprite( x, y, Tiles.Water.pos.choice() );
+		//s.tint = 0x010101 * Math.floor(this.getNoise(x,y) * 255);
+	};
 };
 
-
-/* World building */
-
-TerrainManager.prototype.checkDirtAt = function ( x, y )
-{
-	return this.getTile(x,y) == TileTypes.Dirt;
-};
 
 extend( TileManager, TerrainManager );

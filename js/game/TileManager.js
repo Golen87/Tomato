@@ -78,8 +78,13 @@ TileManager.prototype.clearOutOfView = function ()
 	for ( var i = 0; i < this.group.children.length; i++ )
 	{
 		var s = this.group.children[i];
-		if ( s.exists && !this.isInView( s.position.x, s.position.y ) )
+		if ( s.exists && !this.isInView( s.position.x, s.position.y ) && !s.persistent )
 		{
+			if ( s.owner ) {
+				s.owner.cropSprite = null;
+				s.owner.soilSprite = null;
+				s.owner = null;
+			}
 			s.kill();
 			this.activeSet.delete(s.pkey);
 		}

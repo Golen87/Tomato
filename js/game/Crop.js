@@ -30,6 +30,7 @@ Crop.prototype.init = function ( cropSprite, soilSprite, x, y )
 
 	this.soilSprite.loadTexture( Soils.texture );
 	this.soilSprite.visible = true;
+	this.soilSprite.anchor.set( 0, 1/2 );
 	this.soilSprite.alpha = 1.0;
 	this.soilSprite.scale.set( 1 );
 

@@ -14,7 +14,7 @@ World.prototype.create = function ()
 
 	this.Player = new Player();
 	this.Player.create(
-		TILE_SIZE*ROOM_WIDTH/2, TILE_SIZE*ROOM_HEIGHT/2,
+		0, 0,
 		this.entityGroup
 	);
 
@@ -22,8 +22,8 @@ World.prototype.create = function ()
 	this.entityManager = new EntityManager( this.entityGroup );
 
 	this.camGoal = new Phaser.Point();
-	this.camGoal.x = 0;
-	this.camGoal.y = 0;
+	this.camGoal.x = -SCREEN_WIDTH/2;
+	this.camGoal.y = -SCREEN_HEIGHT/2;
 	this.camPos = new Phaser.Point();
 	this.camPos.x = this.camGoal.x;
 	this.camPos.y = this.camGoal.y;
@@ -126,14 +126,20 @@ World.prototype.cameraShake = function ( value )
 };
 
 
-World.prototype.checkDirtAt = function ( x, y )
+World.prototype.getTerrain = function ( x, y )
 {
-	return this.terrainManager.checkDirtAt( x, y );
+	return this.terrainManager.getTile( x, y );
 };
 
 World.prototype.checkCollision = function ( x, y )
 {
-	return this.entityManager.checkCollisionAt( x, y );
+	if ( this.entityManager.checkCollisionAt( x, y ) )
+		return true;
+
+	if ( this.terrainManager.getTile( x, y ) == TileTypes.Water )
+		return true;
+
+	return false;
 };
 
 World.prototype.getCropAt = function ( x, y )
@@ -167,7 +173,7 @@ World.prototype.digCrop = function ( x, y )
 		return crop.digCrop();
 	}
 
-	if ( this.terrainManager.checkDirtAt( x, y )) {
+	if ( this.getTerrain( x, y ) == TileTypes.Dirt ) {
 		if ( this.entityManager.digCrop( x, y ) ) {
 			this.entityManager.loadArea( this.camGoal.x, this.camGoal.y );
 			return true;

@@ -3,6 +3,7 @@ function Player () {}
 Player.prototype.create = function ( x, y, playerGroup )
 {
 	this.sprite = playerGroup.create( x, y, 'player', 0 );
+	this.sprite.persistent = true;
 
 	this.grid = new Phaser.Point( Math.round(x/TILE_SIZE), Math.round(y/TILE_SIZE) );
 	this.goal = new Phaser.Point( x, y );
@@ -12,6 +13,7 @@ Player.prototype.create = function ( x, y, playerGroup )
 	this.holdItem.alpha = 0;
 	this.holdItem.anchor.set( 0, 1 );
 	this.holdItem.show = false;
+	this.holdItem.persistent = true;
 
 	this.inventory = new Inventory();
 
@@ -57,7 +59,6 @@ Player.prototype.setupInput = function ()
 	this.keys.space = Global.game.input.keyboard.addKey( Phaser.Keyboard.SPACEBAR );
 	this.keys.e = Global.game.input.keyboard.addKey( Phaser.Keyboard.E );
 	this.keys.i = Global.game.input.keyboard.addKey( Phaser.Keyboard.I );
-	this.keys.shift = Global.game.input.keyboard.addKey( Phaser.Keyboard.SHIFT );
 
 	this.input = {
 		"up": {},
@@ -82,7 +83,7 @@ Player.prototype.handleInput = function ()
 	this.input.down.isDown = this.keys.down.isDown || this.keys.s.isDown;
 	this.input.right.isDown = this.keys.right.isDown || this.keys.d.isDown;
 	this.input.space.isDown = this.keys.space.isDown;
-	this.input.inventory.isDown = this.keys.e.isDown || this.keys.i.isDown || this.keys.shift.isDown;
+	this.input.inventory.isDown = this.keys.e.isDown || this.keys.i.isDown;
 
 	for (var key in this.input) {
 		this.input[key].justDown = ( this.input[key].isDown && !this.input[key].wasDown );
@@ -162,7 +163,7 @@ Player.prototype.handleMovement = function ()
 				this.goal.x = this.grid.x * TILE_SIZE;
 				this.goal.y = this.grid.y * TILE_SIZE;
 
-				if ( Global.World.checkDirtAt( fx, fy ) ) {
+				if ( Global.World.getTerrain( fx, fy ) == TileTypes.Dirt ) {
 					Global.Audio.play( 'walking_dirt' );
 				} else {
 					Global.Audio.play( 'walking_grass' );

@@ -17,26 +17,38 @@ function EntityManager ( entityGroup )
 
 EntityManager.prototype.getValue = function ( x, y )
 {
-	return noise.simplex2(x + this.seed[0], y + this.seed[1]) + noise.simplex2(x/8 - this.seed[0], y/8 - this.seed[1]);
+	return noise.perlin2(x + this.seed[0], y + this.seed[1]) + noise.perlin2(x/8 - this.seed[0], y/8 - this.seed[1]);
 };
 
 EntityManager.prototype.generateTile = function ( x, y )
 {
-	if ( Math.abs(x) + Math.abs(y) < 4 ) {
-		return TileTypes.None;
-	}
-
 	var value = this.getValue( x, y );
+	var terrain = Global.World.getTerrain( x, y );
 
-	if (value > 0.10 && value < 0.15) {
-		if ( !Global.World.checkDirtAt( x, y ) ) {
-			return TileTypes.Tree;
+	if ( Math.abs(x) + Math.abs(y) >= 4 ) {
+
+		if (value > 0.10 && value < 0.15) {
+			if ( terrain != TileTypes.Water ) {
+				return TileTypes.Tree;
+			}
+		}
+
+		if (value > -0.15 && value < -0.10) {
+			if ( terrain != TileTypes.Water ) {
+				return TileTypes.Bush;
+			}
 		}
 	}
 
-	if (value > -0.15 && value < -0.10) {
-		if ( !Global.World.checkDirtAt( x, y ) ) {
-			return TileTypes.Bush;
+	if (value > -0.40 && value < -0.20) {
+		if ( terrain == TileTypes.Grass ) {
+			return TileTypes.Shrub;
+		}
+	}
+
+	if (value > -0.10 && value < 0.10) {
+		if ( terrain == TileTypes.Dirt ) {
+			return TileTypes.Crop;
 		}
 	}
 
@@ -65,15 +77,33 @@ EntityManager.prototype.createTile = function( x, y ) {
 	if ( this.isTile( x, y, TileTypes.Bush ) ) {
 		var s = this.addSprite( x, y, 0 );
 		s.loadTexture( 'bush' );
-		s.frame = randInt(0,2);
+		s.frame = randInt( 0, 2 );
 		s.y -= TILE_SIZE/8;
 		s.anchor.set( 1/3, 1/2 - 1/16 );
+	}
+
+	if ( this.isTile( x, y, TileTypes.Shrub ) ) {
+		var s = this.addSprite( x, y, 0 );
+		s.loadTexture( 'shrub' );
+		s.frame = randInt( 0, 5 );
+		s.y -= TILE_SIZE/8;
+		s.anchor.set( 0, 1/2 - 1/16 );
 	}
 
 	if ( this.getTile(x, y) instanceof Crop ) {
 		var crop = this.addSpriteToGroup( this.group, x, y, 0 );
 		var soil = this.addSpriteToGroup( this.group, x, y, 0 );
-		console.log();
+		this.getTile(x, y).init( crop, soil, x, y );
+	}
+	else if ( this.isTile( x, y, TileTypes.Crop ) ) {
+		var p = [x,y];
+		var crop = new Crop();
+		crop.setSoilType( [Soils.Weed_1, Soils.Weed_2, Soils.Weed_3].choice(), getTime() );
+		this.tileMap[p] = crop;
+		this.cropInstances.push( crop );
+
+		var crop = this.addSpriteToGroup( this.group, x, y, 0 );
+		var soil = this.addSpriteToGroup( this.group, x, y, 0 );
 		this.getTile(x, y).init( crop, soil, x, y );
 	}
 };
@@ -85,44 +115,6 @@ EntityManager.prototype.checkCollisionAt = function ( x, y )
 {
 	return this.getTile(x,y) == TileTypes.Tree || this.getTile(x,y) == TileTypes.Bush;
 };
-/*
-EntityManager.prototype.clearOutOfView = function ()
-{
-	for ( var i = 0; i < this.group.children.length; i++ )
-	{
-		var s = this.group.children[i];
-		if ( s.exists && !this.isInView( s.position.x, s.position.y ) )
-		{
-			if ( s.owner ) {
-				s.owner.cropSprite = null;
-				s.owner = null;
-			}
-			s.kill();
-			this.activeSet.delete(s.pkey);
-		}
-	}
-
-	for ( var i = 0; i < this.soilGroup.children.length; i++ )
-	{
-		var s = this.soilGroup.children[i];
-		if ( s.exists && !this.isInView( s.position.x, s.position.y ) )
-		{
-			if ( s.owner ) {
-				s.owner.soilSprite = null;
-				s.owner = null;
-			}
-			s.kill();
-			this.activeSet.delete(s.pkey);
-		}
-	}
-};
-EntityManager.prototype.loadArea = function ( worldX, worldY )
-{
-	TileManager.prototype.loadArea.call( this, worldX, worldY );
-
-	this.soilGroup.sort( 'y', Phaser.Group.SORT_ASCENDING );
-};
-*/
 
 
 EntityManager.prototype.getCrop = function ( x, y )
