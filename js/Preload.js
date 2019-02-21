@@ -19,6 +19,7 @@ Global.Preload.prototype = {
 
 		this.load.spritesheet( 'player', 'assets/sprites/player.png', 128, 256 );
 		this.load.spritesheet( 'ground', 'assets/sprites/ground.png', 128, 128 );
+		this.load.spritesheet( 'grass_edge', 'assets/sprites/grass-edge.png', 64, 64 );
 		this.load.spritesheet( 'soil', 'assets/sprites/soil.png', 128, 256 );
 		this.load.spritesheet( 'shrub', 'assets/sprites/shrub.png', 128, 256 );
 		this.load.spritesheet( 'bush', 'assets/sprites/bush.png', 384, 256 );

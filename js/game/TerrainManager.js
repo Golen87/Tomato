@@ -52,40 +52,78 @@ TerrainManager.prototype.generateTile = function ( x, y )
 	return TileTypes.Grass;
 };
 
-TerrainManager.prototype.addLand = function( x, y, dx, dy, index ) {
-	if (this.isTile( x+dx, y+dy, TileTypes.Dirt )) {
-		var s = this.addSprite( x, y, 0 );
-
-		var frames = Tiles.Dirt.pos[index].toIndex( this.tileset );
-		s.animations.add( 'idle', frames, 1, true );
-		s.animations.play( 'idle' );
-
-		return s;
+TerrainManager.prototype.addGround = function( x, y, pos ) {
+	var s = this.addSprite( x, y, pos );
+	if ( s ) {
+		s.loadTexture( this.tileset );
+		s.frame = posToIndex( this.tileset, pos );
 	}
+	return s;
+};
+
+TerrainManager.prototype.addEdge = function( x, y, pos ) {
+	if ( pos ) {
+		var s = this.addSprite( x, y, [0,0] );
+		if ( s ) {
+			s.loadTexture( 'grass_edge' );
+			s.frame = posToIndex( 'grass_edge', pos );
+		}
+	}
+};
+
+TerrainManager.prototype.addEdges = function( x, y ) {
+	var N	= this.isTile( x, y-1, TileTypes.Grass );
+	var NE	= this.isTile( x+1, y-1, TileTypes.Grass );
+	var E	= this.isTile( x+1, y, TileTypes.Grass );
+	var SE	= this.isTile( x+1, y+1, TileTypes.Grass );
+	var S	= this.isTile( x, y+1, TileTypes.Grass );
+	var SW	= this.isTile( x-1, y+1, TileTypes.Grass );
+	var W	= this.isTile( x-1, y, TileTypes.Grass );
+	var NW	= this.isTile( x-1, y-1, TileTypes.Grass );
+
+	var pos = null;
+	if ( N && W )	pos = [0,0];
+	else if ( N )	pos = [3,0];
+	else if ( W )	pos = [2,0];
+	else if ( NW )	pos = [5,1];
+	this.addEdge( x, y, pos );
+
+	var pos = null;
+	if ( N && E )	pos = [1,0];
+	else if ( N )	pos = [3,0];
+	else if ( E )	pos = [3,1];
+	else if ( NE )	pos = [4,1];
+	this.addEdge( x+1/2, y, pos );
+
+	var pos = null;
+	if ( S && W )	pos = [0,1];
+	else if ( S )	pos = [2,1];
+	else if ( W )	pos = [2,0];
+	else if ( SW )	pos = [5,0];
+	this.addEdge( x, y+1/2, pos );
+
+	var pos = null;
+	if ( S && E )	pos = [1,1];
+	else if ( S )	pos = [2,1];
+	else if ( E )	pos = [3,1];
+	else if ( SE )	pos = [4,0];
+	this.addEdge( x+1/2, y+1/2, pos );
 };
 
 TerrainManager.prototype.createTile = function( x, y ) {
 	if ( this.isTile( x, y, TileTypes.Dirt ) ) {
-		var index = 0;
-		index += 1 * this.isTile( x+1, y, TileTypes.Dirt ); // Right
-		index += 2 * this.isTile( x, y+1, TileTypes.Dirt ); // Down
-		index += 4 * this.isTile( x-1, y, TileTypes.Dirt ); // Left
-		index += 8 * this.isTile( x, y-1, TileTypes.Dirt ); // Up
-
-		index = randInt(0,2);
-
-		var s = this.addSprite( x, y, Tiles.Dirt.pos[index] );
+		var s = this.addGround( x, y, Tiles.Dirt.pos.choice() );
+		var s = this.addEdges( x, y );
 		//s.tint = 0x010101 * Math.floor(this.getNoise(x,y) * 255);
 	}
 
 	if ( this.isTile( x, y, TileTypes.Grass ) ) {
-		var s = this.addSprite( x, y, Tiles.Grass.pos.choice() );
-		//var s = this.addSprite( x, y, Tiles.Grass.pos[0] );
+		var s = this.addGround( x, y, Tiles.Grass.pos.choice() );
 		//s.tint = 0x010101 * Math.floor(this.getNoise(x,y) * 255);
 	};
 
 	if ( this.isTile( x, y, TileTypes.Water ) ) {
-		var s = this.addSprite( x, y, Tiles.Water.pos.choice() );
+		var s = this.addGround( x, y, Tiles.Water.pos.choice() );
 		//s.tint = 0x010101 * Math.floor(this.getNoise(x,y) * 255);
 	};
 };

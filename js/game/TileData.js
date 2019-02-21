@@ -32,7 +32,8 @@ const Tiles = {
 function posToIndex( tileset, pos )
 {
 	var tilesetWidth = {
-		"ground": 3
+		"ground": 3,
+		"grass_edge": 6,
 	}[tileset];
 	return pos[0] + pos[1] * tilesetWidth;
 }

@@ -8,7 +8,7 @@ function TileManager ( tileset, group=null )
 		this.group = group;
 	else
 		this.group = Global.game.add.group();
-	this.group.createMultiple( 3*ROOM_WIDTH*ROOM_HEIGHT, tileset, 0, false );
+	this.group.createMultiple( 5*ROOM_WIDTH*ROOM_HEIGHT, tileset, 0, false );
 
 	this.activeSet = new Set();
 
