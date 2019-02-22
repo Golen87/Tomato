@@ -15,39 +15,56 @@ function EntityManager ( entityGroup )
 
 /* Tile generation */
 
-EntityManager.prototype.getValue = function ( x, y )
+EntityManager.prototype.getNoise = function ( x, y )
 {
-	return noise.perlin2(x + this.seed[0], y + this.seed[1]) + noise.perlin2(x/8 - this.seed[0], y/8 - this.seed[1]);
+	return 0.5 + noise.perlin2(0.5+x*2.1, 0.5+y*2.1) / 2;
+};
+
+EntityManager.prototype.blueCheck = function ( x, y, r )
+{
+	var max = -1;
+	r = Math.round(r);
+	for ( var dx = x-r; dx <= x+r; dx++ ) {
+		for ( var dy = y-r; dy <= y+r; dy++ ) {
+			var value = this.getNoise( dx, dy );
+			if ( value > max ) {
+				max = value;
+			}
+		}
+	}
+
+	return ( this.getNoise( x, y ) == max );
 };
 
 EntityManager.prototype.generateTile = function ( x, y )
 {
-	var value = this.getValue( x, y );
+	var value = this.getNoise( x, y );
 	var terrain = Global.World.getTerrain( x, y );
 
-	if ( Math.abs(x) + Math.abs(y) >= 4 ) {
+	if ( Math.abs(x) + Math.abs(y) >= 3 ) {
+		if ( terrain != TileTypes.Water ) {
 
-		if (value > 0.10 && value < 0.15) {
-			if ( terrain != TileTypes.Water ) {
-				return TileTypes.Tree;
+			var radius = (terrain == TileTypes.Grass) ? 1 : 2;
+			if ( this.blueCheck(x,y,radius) ) {
+				if ( this.getNoise( x+100, y ) < 0.5 ) {
+					return TileTypes.Tree;
+				}
+				else {
+					return TileTypes.Bush;
+				}
 			}
-		}
 
-		if (value > -0.15 && value < -0.10) {
-			if ( terrain != TileTypes.Water ) {
-				return TileTypes.Bush;
-			}
 		}
 	}
 
-	if (value > -0.40 && value < -0.20) {
-		if ( terrain == TileTypes.Grass ) {
+	if ( terrain == TileTypes.Grass ) {
+		if ( this.blueCheck(x+50,y,value+0.1) ) {
 			return TileTypes.Shrub;
 		}
 	}
 
-	if (value > -0.10 && value < 0.10) {
-		if ( terrain == TileTypes.Dirt ) {
+	if ( terrain == TileTypes.Dirt ) {
+		if ( this.blueCheck(x+50,y,value+0.1) ) {
 			return TileTypes.Crop;
 		}
 	}
@@ -86,8 +103,8 @@ EntityManager.prototype.createTile = function( x, y ) {
 		var s = this.addSprite( x, y, 0 );
 		s.loadTexture( 'shrub' );
 		s.frame = randInt( 0, 5 );
-		s.y -= TILE_SIZE/8;
-		s.anchor.set( 0, 1/2 - 1/16 );
+		s.y -= TILE_SIZE/4;
+		s.anchor.set( 0, 1/2 - 1/8 );
 	}
 
 	if ( this.getTile(x, y) instanceof Crop ) {

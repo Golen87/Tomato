@@ -1,6 +1,7 @@
 function TileManager ( tileset, group=null )
 {
 	this.seed = [randFloat( -10000, 10000 ), randFloat( -10000, 10000 )];
+	noise.seed(Math.random());
 	this.tileMap = {};
 
 	this.tileset = tileset;

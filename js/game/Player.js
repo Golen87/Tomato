@@ -178,7 +178,7 @@ Player.prototype.handleMovement = function ()
 	this.sprite.y += ( this.goal.y - this.sprite.y ) * fac;
 
 	// Character bobbing animation
-	this.sprite.anchor.y = 0.65 + Math.sin( Global.game.time.totalElapsedSeconds() * 3 * Math.PI ) / 256;
+	this.sprite.anchor.y = 0.60 + Math.sin( Global.game.time.totalElapsedSeconds() * 3 * Math.PI ) / 256;
 };
 
 Player.prototype.handleInventory = function ()

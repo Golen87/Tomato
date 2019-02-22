@@ -111,20 +111,25 @@ TerrainManager.prototype.addEdges = function( x, y ) {
 };
 
 TerrainManager.prototype.createTile = function( x, y ) {
+	var tileNoise = 0.5 + noise.perlin2(0.5+x*2.1, 0.5+y*2.1) / 2;
+
 	if ( this.isTile( x, y, TileTypes.Dirt ) ) {
 		var s = this.addGround( x, y, Tiles.Dirt.pos.choice() );
+		s.tint = 0x010101 * Math.floor(255 - tileNoise*20);
 		var s = this.addEdges( x, y );
 		//s.tint = 0x010101 * Math.floor(this.getNoise(x,y) * 255);
 	}
 
 	if ( this.isTile( x, y, TileTypes.Grass ) ) {
 		var s = this.addGround( x, y, Tiles.Grass.pos.choice() );
-		//s.tint = 0x010101 * Math.floor(this.getNoise(x,y) * 255);
+		//s.tint = 0x010101 * Math.floor(Global.World.entityManager.getNoise(x,y) * 255);
+		s.tint = 0x010101 * Math.floor(255 - tileNoise*20);
 	};
 
 	if ( this.isTile( x, y, TileTypes.Water ) ) {
 		var s = this.addGround( x, y, Tiles.Water.pos.choice() );
 		//s.tint = 0x010101 * Math.floor(this.getNoise(x,y) * 255);
+		s.tint = 0x010101 * Math.floor(255 - tileNoise*20);
 	};
 };
 
